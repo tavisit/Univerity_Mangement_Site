@@ -39,6 +39,11 @@ namespace SINU.Pages
                     myProfileTemp.photo_url = "";
                 else
                     myProfileTemp.photo_url = (string)dt.Rows[0][6];
+                if (dt.Rows[0][5].ToString() == "")
+                    myProfileTemp.birth_date = DateTime.Parse("");
+                else
+                    myProfileTemp.birth_date = DateTime.Parse(dt.Rows[0][5].ToString());
+
             }
             return myProfileTemp;
         }
@@ -128,7 +133,7 @@ namespace SINU.Pages
                     command.Parameters.AddWithValue("@password", profile.password);
                     command.Parameters.AddWithValue("@surname", profile.surname);
                     command.Parameters.AddWithValue("@lastname", profile.lastname);
-                    if (profile.birth_date == null)
+                    if (profile.birth_date.ToString() == "")
                     {
                         profile.birth_date = new DateTime();
                         profile.birth_date = DateTime.Now.Date;

@@ -121,13 +121,13 @@
                     <tr>
                         <td class="auto-style5">Photo:</td>
                         <td class="auto-style10">
-                            <asp:TextBox ID="TextBox13" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox13" runat="server" Width="500px" TextMode="Url"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td class="auto-style8">Birth:</td>
                         <td class="auto-style9">
-                            <asp:TextBox ID="TextBox14" TextMode="Date" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox14" runat="server" Width="500px"></asp:TextBox>
                             (Format dd-mm-yyyy)</td>
                     </tr>
                     <tr>

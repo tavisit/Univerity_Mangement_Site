@@ -303,8 +303,31 @@ namespace SINU.Pages
                 modelUser.birth_date = DateTime.Parse(TextBox14.Text);
             }
             SQLOperations.UpdateUser(modelUser);
+            if (myProfile.username != modelUser.username)
+            {
+                TextBox9.Text = modelUser.username;
+            }
+            if (myProfile.password != modelUser.password)
+            {
+                TextBox10.Text = modelUser.password;
+            }
+            if (myProfile.surname != modelUser.surname)
+            {
+                TextBox11.Text = modelUser.surname;
+            }
+            if (myProfile.lastname != modelUser.lastname)
+            {
+                TextBox12.Text = modelUser.lastname;
+            }
+            if (myProfile.photo_url != modelUser.photo_url)
+            {
+                TextBox13.Text = modelUser.photo_url;
+            }
+            if (myProfile.birth_date.ToString() != modelUser.birth_date.ToString())
+            {
+                TextBox14.Text = modelUser.birth_date.ToString();
+            }
             myProfile = modelUser;
-            Response.Redirect("MyAccount.aspx");
         }
 
         protected void DeleteAccountBtn_Click(object sender, EventArgs e)
