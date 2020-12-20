@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace SINU.Pages
 {
@@ -19,7 +16,7 @@ namespace SINU.Pages
             {
                 if (counter % 2 == 0) ListNews.Text += "<tr>";
                 ListNews.Text += "<td >";
-                 ListNews.Text += "<a  href = \"" + n.link + "\" ><h3>" + n.title + " </h3>";
+                ListNews.Text += "<a  href = \"" + n.link + "\" ><h3>" + n.title + " </h3>";
                 ListNews.Text += "<img border=\"0\" src=" + n.image_url + " width = \"300px\" height = \"300px\"></a>";
                 ListNews.Text += "</td>";
                 if (counter % 2 == 1) ListNews.Text += "</tr>";

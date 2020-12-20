@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 using System.Data.SqlClient;
+using System.Web.UI;
 
 namespace SINU.Pages
 {
@@ -38,7 +35,7 @@ namespace SINU.Pages
             {
                 return false;
             }
-            
+
             return true;
         }
         private void ViewProfile()
@@ -50,10 +47,43 @@ namespace SINU.Pages
             //Fill the Literal with info
             MyProfileLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
             MyProfileLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-            MyProfileLiteral.Text += "<h1 style=\"text-align:center;\">" + myProfile.surname + " " + myProfile.lastname + "</h1></br>";
+            MyProfileLiteral.Text += "<h1 style=\"text-align:center;\">" + myProfile.surname + " " + myProfile.lastname + "</br>Specialization: " + myProfile.Student.Univ_info.specialization + "</h1></br>";
             MyProfileLiteral.Text += "<img style = \"margin-left: auto;margin-right: auto;display: block;\" border=\"0\" src=" + myProfile.photo_url + " width = \"250px\" height = \"250px\">";
             MyProfileLiteral.Text += "</div>";
             MyProfileLiteral.Text += "</div>";
+
+            //Fill the courses literal
+            if (myProfile.id > 200000)
+            {
+                List<SQLOperations.SubjectGrades> mySubjects = SQLOperations.getSubjectsByIdStudent(myProfile);
+                ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
+
+                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                ViewInformationLiteral.Text += "<br><br><h2>Current Exams</h2>";
+                foreach (var subject in mySubjects)
+                {
+                    if (subject.grade == 0)
+                    {
+                        ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark is: Currently Taking It</h4>";
+                    }
+                }
+                ViewInformationLiteral.Text += "<br><br></div>";
+
+                ViewInformationLiteral.Text += "<div style = \"height:30px;background-color:purple;\"></div>";
+
+                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                ViewInformationLiteral.Text += "<br><br><h2>Taken and passed exams</h2>";
+                foreach (var subject in mySubjects)
+                {
+                    if (subject.grade > 0)
+                    {
+                        ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark was: " + subject.grade + "</h4>";
+                    }
+                }
+                ViewInformationLiteral.Text += "<br><br></div>";
+
+                ViewInformationLiteral.Text += "</div>";
+            }
 
             //Fill the update TextBoxes
             if (unchangedTextBoxesUpdate())
@@ -109,7 +139,7 @@ namespace SINU.Pages
         private bool ValidateCredentials(string myCredential)
         {
             var myRegex = new System.Text.RegularExpressions.Regex(@"[a-zA-z0-9]*$");
-            if(!myRegex.IsMatch(myCredential))
+            if (!myRegex.IsMatch(myCredential))
             {
                 return false;
             }
@@ -127,14 +157,14 @@ namespace SINU.Pages
             if (TextBox1.Text == "" || TextBox2.Text == "" || TextBox2.Text.Length < 8)
                 return;
 
-            if(!(ValidateCredentials(TextBox2.Text)))
+            if (!(ValidateCredentials(TextBox2.Text)))
             {
                 Label1.Text = "Your email and password is incorrect";
                 Label1.ForeColor = System.Drawing.Color.Red;
                 return;
             }
 
-            cmd.Parameters.AddWithValue("@email", TextBox1.Text+" %");
+            cmd.Parameters.AddWithValue("@email", TextBox1.Text + " %");
             cmd.Parameters.AddWithValue("@word", TextBox2.Text + " %");
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
@@ -207,15 +237,15 @@ namespace SINU.Pages
             }
 
             SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email]) values(@id,@username,@password,@surname,@lastname,@email)", con);
-            
-            if (TextBox3.Text == "" || TextBox4.Text == "" || TextBox5.Text == "" || 
-                TextBox6.Text=="" || TextBox7.Text.Length < 8 || TextBox7.Text!=TextBox8.Text)
+
+            if (TextBox3.Text == "" || TextBox4.Text == "" || TextBox5.Text == "" ||
+                TextBox6.Text == "" || TextBox7.Text.Length < 8 || TextBox7.Text != TextBox8.Text)
             {
 
                 ErrorRegister();
                 return;
             }
-                
+
 
             if (!(ValidateCredentials(TextBox6.Text) && ValidateCredentials(TextBox7.Text)))
             {
@@ -229,7 +259,7 @@ namespace SINU.Pages
             cmd.Parameters.AddWithValue("@username", TextBox6.Text);
             cmd.Parameters.AddWithValue("@password", TextBox7.Text);
 
-            
+
             var newRandom = new Random();
             int generatedID;
 
@@ -252,13 +282,20 @@ namespace SINU.Pages
                 {
                     isUnique = true;
                 }
-            } while (isUnique==false);
+            } while (isUnique == false);
             cmd.Parameters.AddWithValue("@id", generatedID);
-            
+
             int rowsAdded = cmd.ExecuteNonQuery();
             con.Close();
+
             if (rowsAdded > 0)
             {
+                //add subjects to student
+
+                //add to student table
+
+                //add the student to series table
+
                 Session.Add("email", TextBox3.Text);
                 myProfile = SQLOperations.GetUserByEmail(TextBox3.Text);
                 Response.Redirect("MyAccount.aspx");
@@ -282,7 +319,7 @@ namespace SINU.Pages
             {
                 modelUser.username = TextBox9.Text;
             }
-            if (TextBox10.Text!=modelUser.password && TextBox10.Text!="")
+            if (TextBox10.Text != modelUser.password && TextBox10.Text != "")
             {
                 modelUser.password = TextBox10.Text;
             }
@@ -328,6 +365,7 @@ namespace SINU.Pages
                 TextBox14.Text = modelUser.birth_date.ToString();
             }
             myProfile = modelUser;
+            Response.Redirect("MyAccount.aspx");
         }
 
         protected void DeleteAccountBtn_Click(object sender, EventArgs e)
@@ -344,13 +382,13 @@ namespace SINU.Pages
             if (dt.Rows.Count == 1)
             {
                 bool deletion_completed = SQLOperations.DeleteByID((int)dt.Rows[0][0]);
-                if(deletion_completed==true)
+                if (deletion_completed == true)
                 {
                     Session["email"] = null;
                     Response.Redirect("MyAccount.aspx");
                 }
             }
-            
+
         }
     }
 }

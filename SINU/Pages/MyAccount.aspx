@@ -83,7 +83,7 @@
                 <asp:Literal ID="ViewInformationLiteral" runat="server"></asp:Literal>
                 <br />
                 <br />
-                <asp:Button ID="Log_Out_Btn" runat="server" OnClick="Log_Out_Btn_Click" Text="Log Out" BackColor="White" BorderStyle="Groove" Height="40px" Width="90%" Style="margin-left: 5%; margin-right: 5%;" />
+                <asp:Button ID="Log_Out_Btn" runat="server" OnClick="Log_Out_Btn_Click" Text="Log Out" BackColor="White" BorderStyle="Groove" Height="60px" Width="90%" Style="margin-left: 5%; margin-right: 5%;" />
                 <br />
                 <br />
                 <br />
