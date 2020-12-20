@@ -1,0 +1,1004 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Project_WebsiteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Building_info">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="description" Type="nchar" MaxLength="100" />
+          <Property Name="surface" Type="int" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id_teachers" Type="int" Nullable="false" />
+          <Property Name="id_department" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="salary" Type="int" />
+          <Property Name="status" Type="int" Nullable="false" />
+          <Property Name="seniority" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Info_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id_head" Type="int" Nullable="false" />
+          <Property Name="description" Type="nchar" MaxLength="1000" />
+          <Property Name="building" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id_student" Type="int" Nullable="false" />
+          <Property Name="id_head_teacher" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status_Job">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="description" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="info" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subjects">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="50" />
+          <Property Name="description" Type="nchar" MaxLength="100" />
+          <Property Name="year" Type="int" />
+          <Property Name="credits" Type="int" />
+        </EntityType>
+        <EntityType Name="Subjects_list">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="id_student" Type="int" Nullable="false" />
+          <Property Name="id_subject" Type="int" Nullable="false" />
+          <Property Name="grade" Type="int" />
+          <Property Name="id_teacher" Type="int" />
+        </EntityType>
+        <EntityType Name="Teachers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="job" Type="int" />
+          <Property Name="publications" Type="int" />
+          <Property Name="PhD" Type="bit" />
+          <Property Name="PhD_Certificate" Type="nchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Teaching_Types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="20" />
+          <Property Name="description" Type="nchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Univ_info">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="specialization" Type="nchar" MaxLength="100" />
+          <Property Name="description" Type="nchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="username" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="surname" Type="nchar" MaxLength="100" />
+          <Property Name="lastname" Type="nchar" MaxLength="100" />
+          <Property Name="birth_date" Type="date" />
+          <Property Name="photo_url" Type="nchar" MaxLength="1000" />
+          <Property Name="email" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Working_staff">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="desk_assigned" Type="int" />
+          <Property Name="responsability" Type="nchar" MaxLength="1000" />
+        </EntityType>
+        <Association Name="FK_department_info_department">
+          <End Role="Info_department" Type="Self.Info_department" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Info_department">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_department_Teachers">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="id_teachers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Status_Job">
+          <End Role="Status_Job" Type="Self.Status_Job" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_Job">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_info_department_building_info">
+          <End Role="Building_info" Type="Self.Building_info" Multiplicity="1" />
+          <End Role="Info_department" Type="Self.Info_department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building_info">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Info_department">
+              <PropertyRef Name="building" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_info_department_Teachers">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
+          <End Role="Info_department" Type="Self.Info_department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Info_department">
+              <PropertyRef Name="id_head" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Series_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Series" Type="Self.Series" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Series">
+              <PropertyRef Name="id_student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Series_Teachers">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="1" />
+          <End Role="Series" Type="Self.Series" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Series">
+              <PropertyRef Name="id_head_teacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_univ_info">
+          <End Role="Univ_info" Type="Self.Univ_info" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Univ_info">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="info" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_list_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Subjects_list" Type="Self.Subjects_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects_list">
+              <PropertyRef Name="id_student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_list_Subjects">
+          <End Role="Subjects" Type="Self.Subjects" Multiplicity="1" />
+          <End Role="Subjects_list" Type="Self.Subjects_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subjects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects_list">
+              <PropertyRef Name="id_subject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_list_Teachers">
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="0..1" />
+          <End Role="Subjects_list" Type="Self.Subjects_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects_list">
+              <PropertyRef Name="id_teacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teachers_Teachers">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Teachers">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teachers_Teaching_Types">
+          <End Role="Teaching_Types" Type="Self.Teaching_Types" Multiplicity="0..1" />
+          <End Role="Teachers" Type="Self.Teachers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teaching_Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Teachers">
+              <PropertyRef Name="job" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_working_staff_Employees">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="Working_staff" Type="Self.Working_staff" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Working_staff">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Project_WebsiteModelStoreContainer">
+          <EntitySet Name="Building_info" EntityType="Self.Building_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Info_department" EntityType="Self.Info_department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Series" EntityType="Self.Series" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status_Job" EntityType="Self.Status_Job" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subjects" EntityType="Self.Subjects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subjects_list" EntityType="Self.Subjects_list" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teachers" EntityType="Self.Teachers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teaching_Types" EntityType="Self.Teaching_Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Univ_info" EntityType="Self.Univ_info" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Working_staff" EntityType="Self.Working_staff" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_department_info_department" Association="Self.FK_department_info_department">
+            <End Role="Info_department" EntitySet="Info_department" />
+            <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_department_Teachers" Association="Self.FK_department_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Status_Job" Association="Self.FK_Employees_Status_Job">
+            <End Role="Status_Job" EntitySet="Status_Job" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Users" Association="Self.FK_Employees_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_info_department_building_info" Association="Self.FK_info_department_building_info">
+            <End Role="Building_info" EntitySet="Building_info" />
+            <End Role="Info_department" EntitySet="Info_department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_info_department_Teachers" Association="Self.FK_info_department_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Info_department" EntitySet="Info_department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Series_Student" Association="Self.FK_Series_Student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Series" EntitySet="Series" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Series_Teachers" Association="Self.FK_Series_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Series" EntitySet="Series" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_univ_info" Association="Self.FK_Student_univ_info">
+            <End Role="Univ_info" EntitySet="Univ_info" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_Users" Association="Self.FK_Student_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Student" EntitySet="Student" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_list_Student" Association="Self.FK_Subjects_list_Student">
+            <End Role="Student" EntitySet="Student" />
+            <End Role="Subjects_list" EntitySet="Subjects_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_list_Subjects" Association="Self.FK_Subjects_list_Subjects">
+            <End Role="Subjects" EntitySet="Subjects" />
+            <End Role="Subjects_list" EntitySet="Subjects_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_list_Teachers" Association="Self.FK_Subjects_list_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Subjects_list" EntitySet="Subjects_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teachers_Teachers" Association="Self.FK_Teachers_Teachers">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Teachers" EntitySet="Teachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teachers_Teaching_Types" Association="Self.FK_Teachers_Teaching_Types">
+            <End Role="Teaching_Types" EntitySet="Teaching_Types" />
+            <End Role="Teachers" EntitySet="Teachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_working_staff_Employees" Association="Self.FK_working_staff_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Working_staff" EntitySet="Working_staff" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Project_WebsiteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Building_info">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="surface" Type="Int32" />
+          <NavigationProperty Name="Info_department" Relationship="Self.FK_info_department_building_info" FromRole="Building_info" ToRole="Info_department" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id_teachers" Type="Int32" Nullable="false" />
+          <Property Name="id_department" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Info_department" Relationship="Self.FK_department_info_department" FromRole="Department" ToRole="Info_department" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_department_Teachers" FromRole="Department" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="salary" Type="Int32" />
+          <Property Name="status" Type="Int32" Nullable="false" />
+          <Property Name="seniority" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Status_Job" Relationship="Self.FK_Employees_Status_Job" FromRole="Employees" ToRole="Status_Job" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Employees_Users" FromRole="Employees" ToRole="Users" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Teachers_Teachers" FromRole="Employees" ToRole="Teachers" />
+          <NavigationProperty Name="Working_staff" Relationship="Self.FK_working_staff_Employees" FromRole="Employees" ToRole="Working_staff" />
+        </EntityType>
+        <EntityType Name="Info_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id_head" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="building" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Building_info" Relationship="Self.FK_info_department_building_info" FromRole="Info_department" ToRole="Building_info" />
+          <NavigationProperty Name="Departments" Relationship="Self.FK_department_info_department" FromRole="Info_department" ToRole="Department" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_info_department_Teachers" FromRole="Info_department" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="Series">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id_student" Type="Int32" Nullable="false" />
+          <Property Name="id_head_teacher" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Series_Student" FromRole="Series" ToRole="Student" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Series_Teachers" FromRole="Series" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="Status_Job">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Status_Job" FromRole="Status_Job" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="Student">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="year" Type="Int32" Nullable="false" />
+          <Property Name="info" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Series" Relationship="Self.FK_Series_Student" FromRole="Student" ToRole="Series" />
+          <NavigationProperty Name="Univ_info" Relationship="Self.FK_Student_univ_info" FromRole="Student" ToRole="Univ_info" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Student_Users" FromRole="Student" ToRole="Users" />
+          <NavigationProperty Name="Subjects_list" Relationship="Self.FK_Subjects_list_Student" FromRole="Student" ToRole="Subjects_list" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="year" Type="Int32" />
+          <Property Name="credits" Type="Int32" />
+          <NavigationProperty Name="Subjects_list" Relationship="Self.FK_Subjects_list_Subjects" FromRole="Subjects" ToRole="Subjects_list" />
+        </EntityType>
+        <EntityType Name="Subjects_list">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id_student" Type="Int32" Nullable="false" />
+          <Property Name="id_subject" Type="Int32" Nullable="false" />
+          <Property Name="grade" Type="Int32" />
+          <Property Name="id_teacher" Type="Int32" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Subjects_list_Student" FromRole="Subjects_list" ToRole="Student" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_Subjects_list_Subjects" FromRole="Subjects_list" ToRole="Subjects" />
+          <NavigationProperty Name="Teacher" Relationship="Self.FK_Subjects_list_Teachers" FromRole="Subjects_list" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="Teacher">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="job" Type="Int32" />
+          <Property Name="publications" Type="Int32" />
+          <Property Name="PhD" Type="Boolean" />
+          <Property Name="PhD_Certificate" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Departments" Relationship="Self.FK_department_Teachers" FromRole="Teachers" ToRole="Department" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Teachers_Teachers" FromRole="Teachers" ToRole="Employees" />
+          <NavigationProperty Name="Info_department" Relationship="Self.FK_info_department_Teachers" FromRole="Teachers" ToRole="Info_department" />
+          <NavigationProperty Name="Series" Relationship="Self.FK_Series_Teachers" FromRole="Teachers" ToRole="Series" />
+          <NavigationProperty Name="Subjects_list" Relationship="Self.FK_Subjects_list_Teachers" FromRole="Teachers" ToRole="Subjects_list" />
+          <NavigationProperty Name="Teaching_Types" Relationship="Self.FK_Teachers_Teaching_Types" FromRole="Teachers" ToRole="Teaching_Types" />
+        </EntityType>
+        <EntityType Name="Teaching_Types">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Teachers" Relationship="Self.FK_Teachers_Teaching_Types" FromRole="Teaching_Types" ToRole="Teachers" />
+        </EntityType>
+        <EntityType Name="Univ_info">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="specialization" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Students" Relationship="Self.FK_Student_univ_info" FromRole="Univ_info" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="surname" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="lastname" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="birth_date" Type="DateTime" Precision="0" />
+          <Property Name="photo_url" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Employees_Users" FromRole="Users" ToRole="Employees" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Student_Users" FromRole="Users" ToRole="Student" />
+        </EntityType>
+        <EntityType Name="Working_staff">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="desk_assigned" Type="Int32" />
+          <Property Name="responsability" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_working_staff_Employees" FromRole="Working_staff" ToRole="Employees" />
+        </EntityType>
+        <Association Name="FK_info_department_building_info">
+          <End Role="Building_info" Type="Self.Building_info" Multiplicity="1" />
+          <End Role="Info_department" Type="Self.Info_department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Building_info">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Info_department">
+              <PropertyRef Name="building" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_department_info_department">
+          <End Role="Info_department" Type="Self.Info_department" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Info_department">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="id_department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_department_Teachers">
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="id_teachers" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Status_Job">
+          <End Role="Status_Job" Type="Self.Status_Job" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status_Job">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employee" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teachers_Teachers">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Teachers">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_working_staff_Employees">
+          <End Role="Employees" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Working_staff" Type="Self.Working_staff" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Working_staff">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_info_department_Teachers">
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Info_department" Type="Self.Info_department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Info_department">
+              <PropertyRef Name="id_head" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Series_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Series" Type="Self.Series" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Series">
+              <PropertyRef Name="id_student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Series_Teachers">
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="1" />
+          <End Role="Series" Type="Self.Series" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Series">
+              <PropertyRef Name="id_head_teacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_univ_info">
+          <End Role="Univ_info" Type="Self.Univ_info" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Univ_info">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="info" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Student_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Student">
+              <PropertyRef Name="id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_list_Student">
+          <End Role="Student" Type="Self.Student" Multiplicity="1" />
+          <End Role="Subjects_list" Type="Self.Subjects_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Student">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects_list">
+              <PropertyRef Name="id_student" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_list_Subjects">
+          <End Role="Subjects" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Subjects_list" Type="Self.Subjects_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subjects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects_list">
+              <PropertyRef Name="id_subject" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subjects_list_Teachers">
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="0..1" />
+          <End Role="Subjects_list" Type="Self.Subjects_list" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teachers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Subjects_list">
+              <PropertyRef Name="id_teacher" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Teachers_Teaching_Types">
+          <End Role="Teaching_Types" Type="Self.Teaching_Types" Multiplicity="0..1" />
+          <End Role="Teachers" Type="Self.Teacher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Teaching_Types">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Teachers">
+              <PropertyRef Name="job" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Project_WebsiteEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Building_info" EntityType="Self.Building_info" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Info_department" EntityType="Self.Info_department" />
+          <EntitySet Name="Series" EntityType="Self.Series" />
+          <EntitySet Name="Status_Job" EntityType="Self.Status_Job" />
+          <EntitySet Name="Students" EntityType="Self.Student" />
+          <EntitySet Name="Subjects" EntityType="Self.Subject" />
+          <EntitySet Name="Subjects_list" EntityType="Self.Subjects_list" />
+          <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+          <EntitySet Name="Teaching_Types" EntityType="Self.Teaching_Types" />
+          <EntitySet Name="Univ_info" EntityType="Self.Univ_info" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Working_staff" EntityType="Self.Working_staff" />
+          <AssociationSet Name="FK_info_department_building_info" Association="Self.FK_info_department_building_info">
+            <End Role="Building_info" EntitySet="Building_info" />
+            <End Role="Info_department" EntitySet="Info_department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_department_info_department" Association="Self.FK_department_info_department">
+            <End Role="Info_department" EntitySet="Info_department" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_department_Teachers" Association="Self.FK_department_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Status_Job" Association="Self.FK_Employees_Status_Job">
+            <End Role="Status_Job" EntitySet="Status_Job" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Users" Association="Self.FK_Employees_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teachers_Teachers" Association="Self.FK_Teachers_Teachers">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Teachers" EntitySet="Teachers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_working_staff_Employees" Association="Self.FK_working_staff_Employees">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="Working_staff" EntitySet="Working_staff" />
+          </AssociationSet>
+          <AssociationSet Name="FK_info_department_Teachers" Association="Self.FK_info_department_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Info_department" EntitySet="Info_department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Series_Student" Association="Self.FK_Series_Student">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Series" EntitySet="Series" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Series_Teachers" Association="Self.FK_Series_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Series" EntitySet="Series" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_univ_info" Association="Self.FK_Student_univ_info">
+            <End Role="Univ_info" EntitySet="Univ_info" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Student_Users" Association="Self.FK_Student_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Student" EntitySet="Students" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_list_Student" Association="Self.FK_Subjects_list_Student">
+            <End Role="Student" EntitySet="Students" />
+            <End Role="Subjects_list" EntitySet="Subjects_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_list_Subjects" Association="Self.FK_Subjects_list_Subjects">
+            <End Role="Subjects" EntitySet="Subjects" />
+            <End Role="Subjects_list" EntitySet="Subjects_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subjects_list_Teachers" Association="Self.FK_Subjects_list_Teachers">
+            <End Role="Teachers" EntitySet="Teachers" />
+            <End Role="Subjects_list" EntitySet="Subjects_list" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Teachers_Teaching_Types" Association="Self.FK_Teachers_Teaching_Types">
+            <End Role="Teaching_Types" EntitySet="Teaching_Types" />
+            <End Role="Teachers" EntitySet="Teachers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Project_WebsiteModelStoreContainer" CdmEntityContainer="Project_WebsiteEntities">
+          <EntitySetMapping Name="Building_info">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Building_info">
+              <MappingFragment StoreEntitySet="Building_info">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="surface" ColumnName="surface" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_teachers" ColumnName="id_teachers" />
+                <ScalarProperty Name="id_department" ColumnName="id_department" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Employee">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="salary" ColumnName="salary" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="seniority" ColumnName="seniority" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Info_department">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Info_department">
+              <MappingFragment StoreEntitySet="Info_department">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_head" ColumnName="id_head" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="building" ColumnName="building" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Series">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Series">
+              <MappingFragment StoreEntitySet="Series">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_student" ColumnName="id_student" />
+                <ScalarProperty Name="id_head_teacher" ColumnName="id_head_teacher" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status_Job">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Status_Job">
+              <MappingFragment StoreEntitySet="Status_Job">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Students">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Student">
+              <MappingFragment StoreEntitySet="Student">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="info" ColumnName="info" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Subject">
+              <MappingFragment StoreEntitySet="Subjects">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="credits" ColumnName="credits" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects_list">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Subjects_list">
+              <MappingFragment StoreEntitySet="Subjects_list">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_student" ColumnName="id_student" />
+                <ScalarProperty Name="id_subject" ColumnName="id_subject" />
+                <ScalarProperty Name="grade" ColumnName="grade" />
+                <ScalarProperty Name="id_teacher" ColumnName="id_teacher" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teachers">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Teacher">
+              <MappingFragment StoreEntitySet="Teachers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="job" ColumnName="job" />
+                <ScalarProperty Name="publications" ColumnName="publications" />
+                <ScalarProperty Name="PhD" ColumnName="PhD" />
+                <ScalarProperty Name="PhD_Certificate" ColumnName="PhD_Certificate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Teaching_Types">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Teaching_Types">
+              <MappingFragment StoreEntitySet="Teaching_Types">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Univ_info">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Univ_info">
+              <MappingFragment StoreEntitySet="Univ_info">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="specialization" ColumnName="specialization" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="birth_date" ColumnName="birth_date" />
+                <ScalarProperty Name="photo_url" ColumnName="photo_url" />
+                <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Working_staff">
+            <EntityTypeMapping TypeName="Project_WebsiteModel.Working_staff">
+              <MappingFragment StoreEntitySet="Working_staff">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="desk_assigned" ColumnName="desk_assigned" />
+                <ScalarProperty Name="responsability" ColumnName="responsability" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
