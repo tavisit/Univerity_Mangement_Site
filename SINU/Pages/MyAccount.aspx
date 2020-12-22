@@ -71,6 +71,13 @@
         {
             margin: 0 auto;
         }
+        .auto-style16 {
+            width: 600px;
+        }
+        .auto-style17 {
+            height: 26px;
+            width: 600px;
+        }
     </style>
 </head>
 <body>
@@ -126,7 +133,52 @@
                 <asp:Literal ID="ViewInformationLiteral" runat="server"></asp:Literal>
                 <br />
                 <br />
-                <asp:Button ID="Log_Out_Btn" runat="server" OnClick="Log_Out_Btn_Click" Text="Log Out" BackColor="White" BorderStyle="Groove" Height="60px" Width="90%" Style="margin-left: 5%; margin-right: 5%;" />
+                <div id= "pay_the_dorm_div" runat="server" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white">
+                 <table style="margin-left: 5%; margin-right: 5%;" class="auto-style15">
+                     <tr>
+                        <td class="auto-style9">
+                          </td>
+                    </tr>
+                     <tr>
+                        <td class="auto-style9">
+                            <h2 style =" text-align:center;">Pay the dorm</h2>
+                          </td>
+                    </tr>
+                     <tr>
+                        <td class="auto-style9">
+                          </td>
+                    </tr>
+                      <tr>
+                        <td class="auto-style9">
+                            <h4 style =" text-align:center;"><asp:Label ID="Label6" runat="server" Text="Label"></asp:Label></h4>
+                          </td>
+                    </tr>
+                     <tr>
+                        <td class="auto-style9">
+                          </td>
+                    </tr>
+                     <tr>
+                        <td class="auto-style9">
+                             <asp:Button ID="payTheDormBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="payTheDormBtn_Click" Text="Pay the dorm" Height="27px" Width="60%" Style="margin-left: 20%; margin-right: 20%;font-size:20px;" />
+                
+                          </td>
+                    </tr>
+                </table>
+                    
+               <br />
+                    </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <asp:Button ID="Log_Out_Btn" runat="server" OnClick="Log_Out_Btn_Click" Text="Log Out" BackColor="White" BorderStyle="Groove" Height="60px" Width="90%" Style="margin-left: 5%; margin-right: 5%; font-size:30px;" />
                 <br />
                 <br />
                 <br />
@@ -134,7 +186,7 @@
                     <table style="width: 100%; margin-left: 5%; margin-right: 5%;">
                                         <tr>
                         <td class="auto-style1">&nbsp;</td>
-                        <td></td>
+                        <td><h1>Information settings</h1></td>
                         <td class="auto-style1">&nbsp;</td>
                     </tr>
                     <tr>
@@ -253,42 +305,42 @@
                     </tr>
                     <tr>
                         <td class="style2">Email:</td>
-                        <td>
+                        <td class="auto-style16">
                             <asp:TextBox ID="TextBox3" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="auto-style12">Surname:</td>
-                        <td class="auto-style13">
+                        <td class="auto-style17">
                             <asp:TextBox ID="TextBox4" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td class="auto-style13"></td>
                     </tr>
                     <tr>
                         <td class="style2">Lastname:</td>
-                        <td>
+                        <td class="auto-style16">
                             <asp:TextBox ID="TextBox5" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="auto-style12">Username:</td>
-                        <td class="auto-style13">
+                        <td class="auto-style17">
                             <asp:TextBox ID="TextBox6" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td class="auto-style13"></td>
                     </tr>
                     <tr>
                         <td class="style2">Password:</td>
-                        <td>
+                        <td class="auto-style16">
                             <asp:TextBox ID="TextBox7" TextMode="Password" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="style2">Confirm password:</td>
-                        <td>
+                        <td class="auto-style16">
                             <asp:TextBox ID="TextBox8" TextMode="Password" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
@@ -297,14 +349,22 @@
                         <td class="style2">
                             <asp:Label ID="Label5" runat="server" Text="Label"></asp:Label>
                         </td>
-                        <td>
+                        <td class="auto-style16">
                             <asp:TextBox ID="TextBox18" type="number" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
+                        <td class="style2">
+                        </td>
+                        <td class="auto-style16">
+                            <asp:CheckBox id="checkbox1" runat="server" Text="Dorm?" TextAlign="Right" OnCheckedChanged="Check_Clicked"/>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
                         <td class="style2"></td>
-                        <td>
+                        <td class="auto-style16">
                             <asp:Button ID="RegisterRegisterPanelBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="RegisterRegisterPanelBtn_Click" Text="Register" Width="100px" />
                             <asp:Button ID="CancelRegisterPanelBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="CancelRegisterPanelBtn_Click" Text="Cancel" Width="100px" />
                             <asp:Button ID="RegisterTeacherBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="RegisterTeacherBtn_Click" Text="Register" Width="100px" />
@@ -314,7 +374,7 @@
                     </tr>
                     <tr>
                         <td class="auto-style1">&nbsp;</td>
-                        <td></td>
+                        <td class="auto-style16"></td>
                         <td class="auto-style1">&nbsp;</td>
                     </tr>
                 </table>

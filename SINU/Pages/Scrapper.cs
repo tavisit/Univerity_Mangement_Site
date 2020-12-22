@@ -92,7 +92,10 @@ namespace SINU.Pages
             int currentNumberOfNews = 1;
             foreach (HtmlNode item in annOutlet)
             {
-                scrappedInfo.Add(item.InnerHtml);
+                string addingInformation = item.InnerHtml.Substring(0, item.InnerHtml.IndexOf("<a") + 2) +
+                                           " target=\"_blank\" href=\"https://ac.utcluj.ro/" +
+                                           item.InnerHtml.Substring(item.InnerHtml.IndexOf("<a") + 9);
+                scrappedInfo.Add(addingInformation);
                 if (currentNumberOfNews >= howMany)
                 {
                     break;

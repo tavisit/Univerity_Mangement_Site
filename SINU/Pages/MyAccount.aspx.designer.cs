@@ -141,6 +141,33 @@ namespace SINU.Pages
         protected global::System.Web.UI.WebControls.Literal ViewInformationLiteral;
 
         /// <summary>
+        /// pay_the_dorm_div control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl pay_the_dorm_div;
+
+        /// <summary>
+        /// Label6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label6;
+
+        /// <summary>
+        /// payTheDormBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button payTheDormBtn;
+
+        /// <summary>
         /// Log_Out_Btn control.
         /// </summary>
         /// <remarks>
@@ -373,6 +400,15 @@ namespace SINU.Pages
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox TextBox18;
+
+        /// <summary>
+        /// checkbox1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox checkbox1;
 
         /// <summary>
         /// RegisterRegisterPanelBtn control.

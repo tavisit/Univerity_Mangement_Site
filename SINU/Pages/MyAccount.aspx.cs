@@ -61,30 +61,41 @@ namespace SINU.Pages
                 List<SQLOperations.SubjectGrades> mySubjects = SQLOperations.getSubjectsByIdStudent(myProfile);
                 ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
 
-                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-                ViewInformationLiteral.Text += "<br><br><h2>Current Exams</h2>";
-                foreach (var subject in mySubjects)
-                {
-                    if (subject.grade == 0)
+                    ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                    ViewInformationLiteral.Text += "<br><br><h2>Current Exams</h2>";
+                    foreach (var subject in mySubjects)
                     {
-                        ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark is: Currently Taking It</h4>";
+                        if (subject.grade == 0)
+                        {
+                            ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark is: Currently Taking It</h4>";
+                        }
                     }
-                }
-                ViewInformationLiteral.Text += "<br><br></div>";
+                    ViewInformationLiteral.Text += "<br><br></div>";
 
-                ViewInformationLiteral.Text += "<div style = \"height:30px;background-color:purple;\"></div>";
+                    ViewInformationLiteral.Text += "<div style = \"height:30px;background-color:purple;\"></div>";
 
-                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-                ViewInformationLiteral.Text += "<br><br><h2>Taken and passed exams</h2>";
-                foreach (var subject in mySubjects)
-                {
-                    if (subject.grade > 0)
+                    ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                    ViewInformationLiteral.Text += "<br><br><h2>Taken and passed exams</h2>";
+                    foreach (var subject in mySubjects)
                     {
-                        ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark was: " + subject.grade + "</h4>";
+                        if (subject.grade > 0)
+                        {
+                            ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark was: " + subject.grade + "</h4>";
+                        }
                     }
-                }
-                ViewInformationLiteral.Text += "<br><br></div>";
+                    ViewInformationLiteral.Text += "<br><br></div>";
 
+                    int dorm_payment = SQLOperations.getStudentDorm(myProfile.id);
+                    if(dorm_payment>0)
+                    {
+                        pay_the_dorm_div.Visible = true;
+                        Label6.Text = "Total amount of " + dorm_payment * 200 + " lei for " + dorm_payment + " months";
+                    }
+                    else
+                    {
+                        pay_the_dorm_div.Visible = false;
+                    }
+                    
                 ViewInformationLiteral.Text += "</div>";
             }
             else if(myProfile.id>=100000)
@@ -126,7 +137,7 @@ namespace SINU.Pages
                 ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;text-align:center\">";
 
                     ViewInformationLiteral.Text += "<br><h2>IDs of current students</h2>";
-                    List<int> allStudents = SQLOperations.getAllStudentsID();
+                    List<int> allStudents = GetAllByCriteriaClass.getAllStudentsID();
                     int counter = 0;
 
                     ViewInformationLiteral.Text += "<table>";
@@ -143,7 +154,7 @@ namespace SINU.Pages
                     ViewInformationLiteral.Text += "</table>";
 
                     ViewInformationLiteral.Text += "<br><h2>IDs of current Teachers</h2>";
-                    List<int> allTeachers = SQLOperations.getAllTeachersID();
+                    List<int> allTeachers = GetAllByCriteriaClass.getAllTeachersID();
                     counter = 0;
 
                     ViewInformationLiteral.Text += "<table>";
@@ -160,7 +171,7 @@ namespace SINU.Pages
                     ViewInformationLiteral.Text += "</table>";
 
                     ViewInformationLiteral.Text += "<br><h2>IDs of current working staff</h2>";
-                    List<int> allWorkingStaff = SQLOperations.getAllWorkingStaffID();
+                    List<int> allWorkingStaff = GetAllByCriteriaClass.getAllWorkingStaffID();
                     counter = 0;
 
                     ViewInformationLiteral.Text += "<table>";
@@ -203,6 +214,8 @@ namespace SINU.Pages
             Register_Panel.Visible = false;
             MyProfileLiteral.Text = "";
             RegisterTeacherBtn.Visible = false;
+            checkbox1.Visible = false;
+            pay_the_dorm_div.Visible = false;
 
             if (Session["email"] != null)
             {
@@ -241,6 +254,7 @@ namespace SINU.Pages
                 SessionDiv.Visible = false;
                 Login_Table.Visible = true;
                 Log_Out_Btn.Visible = false;
+                checkbox1.Visible = true;
                 MyProfileLiteral.Text = "";
                 LogInBtn.Focus();
             }
@@ -327,7 +341,7 @@ namespace SINU.Pages
         protected void Log_Out_Btn_Click(object sender, EventArgs e)
         {
             Session["email"] = null;
-            Response.Redirect("Home.aspx");
+            Response.Redirect("MyAccount.aspx");
         }
 
         protected void CancelRegisterPanelBtn_Click(object sender, EventArgs e)
@@ -378,23 +392,6 @@ namespace SINU.Pages
         }
         protected void RegisterRegisterPanelBtn_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(SQLOperations.connectionString);
-            con.Open();
-            SqlCommand cmd_email = new SqlCommand("select * from Users where email = @email", con);
-            cmd_email.Parameters.AddWithValue("@email", TextBox3.Text);
-            SqlDataAdapter sda = new SqlDataAdapter(cmd_email);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            cmd_email.ExecuteNonQuery();
-
-            if (dt.Rows.Count > 0)
-            {
-                ErrorRegister();
-                return;
-            }
-
-            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
-
             if (TextBox3.Text == "" || TextBox4.Text == "" || TextBox5.Text == "" ||
                 TextBox6.Text == "" || TextBox7.Text.Length < 8 || TextBox7.Text != TextBox8.Text)
             {
@@ -403,87 +400,39 @@ namespace SINU.Pages
                 return;
             }
 
-
             if (!(ValidateCredentials(TextBox6.Text) && ValidateCredentials(TextBox7.Text)))
             {
                 ErrorRegister();
                 return;
             }
 
-            cmd.Parameters.AddWithValue("@email", TextBox3.Text);
-            cmd.Parameters.AddWithValue("@surname", TextBox4.Text);
-            cmd.Parameters.AddWithValue("@lastname", TextBox5.Text);
-            cmd.Parameters.AddWithValue("@username", TextBox6.Text);
-            cmd.Parameters.AddWithValue("@password", TextBox7.Text);
-            cmd.Parameters.AddWithValue("@photo_url","https://image.flaticon.com/icons/png/512/21/21294.png");
+            int id_Users = SQLOperations.GetIdFromEmail(TextBox3.Text);
 
-
-            var newRandom = new Random();
-            int generatedID = GeneratedID(200000,999999);
-            
-            cmd.Parameters.AddWithValue("@id", generatedID);
-
-            int rowsAdded = cmd.ExecuteNonQuery();
-            con.Close();
-
-            if (rowsAdded > 0)
+            if (id_Users > 0)
             {
-                con.Open();
-                //add to student table
-                int student_year = 1;
-                if (TextBox18.Text != "") student_year = int.Parse(TextBox18.Text.ToString());
-                cmd = new SqlCommand("Insert into Student (id,year,info) values (@id,"+student_year+",1)", con);
-                cmd.Parameters.AddWithValue("@id", generatedID);
-                cmd.ExecuteNonQuery();
+                ErrorRegister();
+                return;
+            }
 
-                //add subjects to student
-                SqlCommand cmd_search = new SqlCommand("select TOP 1 id from Subjects_list order by id desc", con);
-                sda = new SqlDataAdapter(cmd_search);
-                dt = new DataTable();
-                sda.Fill(dt);
-                cmd_search.ExecuteNonQuery();
-                int nr_id_subjects_list = (int)dt.Rows[0][0]+1;
-                List<int> allSubjects = SQLOperations.getAllSubjectsIDByYear(student_year);
-                List<int> allTeachers = SQLOperations.getAllTeachersID();
+            int year_registered;
+            if (TextBox18.Text == "" || int.Parse(TextBox18.Text.ToString()) > 6) year_registered = 1;
+            else year_registered = int.Parse(TextBox18.Text.ToString());
+            bool dorm = checkbox1.Checked;
 
-                for (int i=0;i<Math.Min(allSubjects.Count,allTeachers.Count); i++)
-                {
-                    cmd = new SqlCommand("insert into Subjects_list ([id], [id_student],[id_subject],[grade],[id_teacher]) values(@id,@id_student,@id_subject,NULL,@id_teacher)", con);
-                    cmd.Parameters.AddWithValue("@id_student", generatedID);
-                    cmd.Parameters.AddWithValue("@id", ++nr_id_subjects_list);
-                    cmd.Parameters.AddWithValue("@id_teacher", allTeachers[i]);
-                    cmd.Parameters.AddWithValue("@id_subject", allSubjects[i]);
-                    cmd.ExecuteNonQuery();
-                }
+            User myUser = new User();
+            myUser.id = GeneratedID(200000, 999999);
+            myUser.email = TextBox3.Text;
+            myUser.surname = TextBox4.Text;
+            myUser.lastname = TextBox5.Text;
+            myUser.username = TextBox6.Text;
+            myUser.password = TextBox7.Text;
+            myUser.photo_url = "https://image.flaticon.com/icons/png/512/21/21294.png";
 
-                //add the student to series table
-                cmd_search = new SqlCommand("select id from Series order by id desc", con);
-                sda = new SqlDataAdapter(cmd_search);
-                dt = new DataTable();
-                sda.Fill(dt);
-                cmd_search.ExecuteNonQuery();
-
-                int id_Series_id = 0;
-                if (dt.Rows.Count > 0)
-                {
-                    id_Series_id = (int)dt.Rows[0][0] + 1;
-                }
-                else
-                {
-                    id_Series_id = 1;
-                }
-                cmd = new SqlCommand("insert into Series ([id], [id_student],[id_head_teacher],[id_series]) values(@id,@id_student,@id_teacher,@id_series)", con);
-                cmd.Parameters.AddWithValue("@id", id_Series_id);
-                cmd.Parameters.AddWithValue("@id_student", generatedID);
-                cmd.Parameters.AddWithValue("@id_teacher", 112345);
-                cmd.Parameters.AddWithValue("@id_series", newRandom.Next(1,3));
-                cmd.ExecuteNonQuery();
-
-                con.Close();
-
+            if (SQLOperations.insertStudent(myUser, year_registered, dorm))
+            {
                 //make the session and redirect
-                Session.Add("email", TextBox3.Text);
-                myProfile = SQLOperations.GetUserByEmail(TextBox3.Text);
+                Session.Add("email", myUser.email);
+                myProfile = myUser;
                 Response.Redirect("MyAccount.aspx");
             }
             else
@@ -500,74 +449,43 @@ namespace SINU.Pages
                 TextBox12.Text == "")
                 return;
 
-            SINU.User modelUser = SQLOperations.GetUserByEmail(Session["email"].ToString());
-            if (TextBox9.Text != modelUser.username)
+            if (TextBox9.Text != myProfile.username)
             {
-                modelUser.username = TextBox9.Text;
+                myProfile.username = TextBox9.Text;
             }
-            if (TextBox10.Text != modelUser.password && TextBox10.Text != "")
+            if (TextBox10.Text != myProfile.password && TextBox10.Text != "")
             {
-                modelUser.password = TextBox10.Text;
+                myProfile.password = TextBox10.Text;
             }
-            if (TextBox11.Text != modelUser.surname)
+            if (TextBox11.Text != myProfile.surname)
             {
-                modelUser.surname = TextBox11.Text;
+                myProfile.surname = TextBox11.Text;
             }
-            if (TextBox12.Text != modelUser.lastname)
+            if (TextBox12.Text != myProfile.lastname)
             {
-                modelUser.lastname = TextBox12.Text;
+                myProfile.lastname = TextBox12.Text;
             }
-            if (TextBox13.Text != modelUser.photo_url)
+            if (TextBox13.Text != myProfile.photo_url)
             {
-                modelUser.photo_url = TextBox13.Text;
+                myProfile.photo_url = TextBox13.Text;
             }
-            if (TextBox14.Text != modelUser.birth_date.ToString())
+            if (TextBox14.Text != myProfile.birth_date.ToString())
             {
-                modelUser.birth_date = DateTime.Parse(TextBox14.Text);
+                myProfile.birth_date = DateTime.Parse(TextBox14.Text);
             }
-            SQLOperations.UpdateUser(modelUser);
-            if (myProfile.username != modelUser.username)
-            {
-                TextBox9.Text = modelUser.username;
-            }
-            if (myProfile.password != modelUser.password)
-            {
-                TextBox10.Text = modelUser.password;
-            }
-            if (myProfile.surname != modelUser.surname)
-            {
-                TextBox11.Text = modelUser.surname;
-            }
-            if (myProfile.lastname != modelUser.lastname)
-            {
-                TextBox12.Text = modelUser.lastname;
-            }
-            if (myProfile.photo_url != modelUser.photo_url)
-            {
-                TextBox13.Text = modelUser.photo_url;
-            }
-            if (myProfile.birth_date.ToString() != modelUser.birth_date.ToString())
-            {
-                TextBox14.Text = modelUser.birth_date.ToString();
-            }
-            myProfile = modelUser;
+
+            SQLOperations.UpdateUser(myProfile);
             Response.Redirect("MyAccount.aspx");
         }
 
         protected void DeleteAccountBtn_Click(object sender, EventArgs e)
         {
             SqlConnection con = new SqlConnection(SQLOperations.connectionString);
-            SqlCommand cmd_email = new SqlCommand("select * from Users where email = @email", con);
-            cmd_email.Parameters.AddWithValue("@email", Session["email"].ToString());
-            SqlDataAdapter sda = new SqlDataAdapter(cmd_email);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            con.Open();
-            cmd_email.ExecuteNonQuery();
-            con.Close();
-            if (dt.Rows.Count == 1)
+            User myUser = SQLOperations.GetUserByEmail(Session["email"].ToString());
+
+            if (myUser!=null)
             {
-                bool deletion_completed = SQLOperations.DeleteByID((int)dt.Rows[0][0]);
+                bool deletion_completed = SQLOperations.DeleteByID(myUser.id);
                 if (deletion_completed == true)
                 {
                     Session["email"] = null;
@@ -595,23 +513,6 @@ namespace SINU.Pages
 
         protected void RegisterTeacherBtn_Click(object sender, EventArgs e)
         {
-            SqlConnection con = new SqlConnection(SQLOperations.connectionString);
-            con.Open();
-            SqlCommand cmd_email = new SqlCommand("select * from Users where email = @email", con);
-            cmd_email.Parameters.AddWithValue("@email", TextBox3.Text);
-            SqlDataAdapter sda = new SqlDataAdapter(cmd_email);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            cmd_email.ExecuteNonQuery();
-
-            if (dt.Rows.Count > 0)
-            {
-                ErrorRegister();
-                return;
-            }
-
-            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
-
             if (TextBox3.Text == "" || TextBox4.Text == "" || TextBox5.Text == "" ||
                 TextBox6.Text == "" || TextBox7.Text.Length < 8 || TextBox7.Text != TextBox8.Text)
             {
@@ -620,44 +521,35 @@ namespace SINU.Pages
                 return;
             }
 
-
             if (!(ValidateCredentials(TextBox6.Text) && ValidateCredentials(TextBox7.Text)))
             {
                 ErrorRegister();
                 return;
             }
 
-            cmd.Parameters.AddWithValue("@email", TextBox3.Text);
-            cmd.Parameters.AddWithValue("@surname", TextBox4.Text);
-            cmd.Parameters.AddWithValue("@lastname", TextBox5.Text);
-            cmd.Parameters.AddWithValue("@username", TextBox6.Text);
-            cmd.Parameters.AddWithValue("@password", TextBox7.Text);
-            cmd.Parameters.AddWithValue("@photo_url", "https://image.flaticon.com/icons/png/512/21/21294.png");
+            int id_Users = SQLOperations.GetIdFromEmail(TextBox3.Text);
 
-
-            var newRandom = new Random();
-            int generatedID = GeneratedID(100000,199999);
-
-            cmd.Parameters.AddWithValue("@id", generatedID);
-
-            int rowsAdded = cmd.ExecuteNonQuery();
-            con.Close();
-
-            if (rowsAdded > 0)
+            if (id_Users > 0)
             {
-                con.Open();
-                int type_of_teacher;
-                if (TextBox18.Text == "" || int.Parse(TextBox18.Text.ToString()) > 6) type_of_teacher = 1;
-                else type_of_teacher = int.Parse(TextBox18.Text.ToString());
-                cmd = new SqlCommand("Insert into Employees (id,salary, status, seniority) values (@id, @salary,@status,1)", con);
-                cmd.Parameters.AddWithValue("@id", generatedID);
-                cmd.Parameters.AddWithValue("@salary", (type_of_teacher-1)*1500+3500);
-                cmd.Parameters.AddWithValue("@status", type_of_teacher);
-                cmd.ExecuteNonQuery();
-                cmd = new SqlCommand("Insert into Teachers (id,job, publications,PhD,Phd_Certificate) values (@id,1,NULL,NULL,NULL)", con);
-                cmd.Parameters.AddWithValue("@id", generatedID);
-                cmd.ExecuteNonQuery();
-                con.Close();
+                ErrorRegister();
+                return;
+            }
+            
+            int type_of_teacher;
+            if (TextBox18.Text == "" || int.Parse(TextBox18.Text.ToString()) > 6) type_of_teacher = 1;
+            else type_of_teacher = int.Parse(TextBox18.Text.ToString());
+
+            User myUser = new User();
+            myUser.id = GeneratedID(100000, 199999);
+            myUser.email = TextBox3.Text;
+            myUser.surname = TextBox4.Text;
+            myUser.lastname = TextBox5.Text;
+            myUser.username = TextBox6.Text;
+            myUser.password = TextBox7.Text;
+            myUser.photo_url = "https://image.flaticon.com/icons/png/512/21/21294.png";
+
+            if (SQLOperations.insertTeacher(myUser,type_of_teacher))
+            {
                 Response.Redirect("MyAccount.aspx");
             }
             else
@@ -665,6 +557,24 @@ namespace SINU.Pages
                 ErrorRegister();
                 return;
             }
+        }
+
+        protected void payTheDormBtn_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://techtolia.medium.com/accept-payments-with-stripe-and-asp-net-c-83f285ed98e0");
+
+            SqlConnection con = new SqlConnection(SQLOperations.connectionString);
+            con.Open();
+            SqlCommand command = new SqlCommand("UPDATE Dorm_payment SET months_to_pay = 0 where id_student = " + myProfile.id, con);
+            command.ExecuteNonQuery();
+            con.Close();
+
+            Response.Redirect("MyAccount.aspx");
+        }
+
+        protected void Check_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }
