@@ -23,7 +23,7 @@ namespace SINU.Pages
     public class Scrapper
     {
 
-        public static List<ScrappedInfo> MainScrapper()
+        public static List<ScrappedInfo> NewsScrapper(int howMany)
         {
             string url = "https://www.utcluj.ro/noutati/";
 
@@ -37,6 +37,7 @@ namespace SINU.Pages
             List<HtmlNode> newsOutlet = html_document.DocumentNode.Descendants("div")
                 .Where(node => node.GetAttributeValue("class", "").Equals("row m-b10")).ToList();
             List<ScrappedInfo> scrappedInfo = new List<ScrappedInfo>();
+            int currentNumberOfNews = 1;
             foreach (HtmlNode item in newsOutlet)
             {
 
@@ -62,6 +63,44 @@ namespace SINU.Pages
 
                 ScrappedInfo currentItem = new ScrappedInfo(item_url, item_img_url, item_text);
                 scrappedInfo.Add(currentItem);
+
+                if(currentNumberOfNews>=howMany)
+                {
+                    break;
+                }
+                else
+                {
+                    currentNumberOfNews++;
+                }
+            }
+            return scrappedInfo;
+        }
+        public static List<string> AnnouncementScrapper(int howMany)
+        {
+            string url = "https://ac.utcluj.ro/anunturi.html";
+
+            var httpClient = new HttpClient();
+            var html = httpClient.GetStringAsync(url);
+
+            var html_document = new HtmlDocument();
+
+            html_document.LoadHtml(html.Result);
+
+            List<HtmlNode> annOutlet = html_document.DocumentNode.Descendants("p")
+                .Where(node => node.GetAttributeValue("class", "").Equals("info")).ToList();
+            List<string> scrappedInfo = new List<string>();
+            int currentNumberOfNews = 1;
+            foreach (HtmlNode item in annOutlet)
+            {
+                scrappedInfo.Add(item.InnerHtml);
+                if (currentNumberOfNews >= howMany)
+                {
+                    break;
+                }
+                else
+                {
+                    currentNumberOfNews++;
+                }
             }
             return scrappedInfo;
         }

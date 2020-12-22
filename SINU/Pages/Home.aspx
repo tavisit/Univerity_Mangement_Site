@@ -46,6 +46,9 @@
                 <br />
             <br />
             <br />
+            <asp:Literal ID="ListStudents" runat="server"></asp:Literal>
+            <br />
+            <br />
             <asp:Literal ID="ListNews" runat="server"></asp:Literal>
         </div>
     </form>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace SINU.Pages
 {
@@ -47,14 +48,16 @@ namespace SINU.Pages
             //Fill the Literal with info
             MyProfileLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
             MyProfileLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-            MyProfileLiteral.Text += "<h1 style=\"text-align:center;\">" + myProfile.surname + " " + myProfile.lastname + "</br>Specialization: " + myProfile.Student.Univ_info.specialization + "</h1></br>";
+            MyProfileLiteral.Text += "<br><h1 style=\"text-align:center;\">" + myProfile.surname + " " + myProfile.lastname + "</h1>";
+            if (myProfile.id > 200000) MyProfileLiteral.Text += "</br><h1 style=\"text-align:center;\">Specialization: " + myProfile.Student.Univ_info.specialization + "</h1></br>";
             MyProfileLiteral.Text += "<img style = \"margin-left: auto;margin-right: auto;display: block;\" border=\"0\" src=" + myProfile.photo_url + " width = \"250px\" height = \"250px\">";
-            MyProfileLiteral.Text += "</div>";
+            MyProfileLiteral.Text += "<br><br></div>";
             MyProfileLiteral.Text += "</div>";
 
             //Fill the courses literal
             if (myProfile.id > 200000)
             {
+                
                 List<SQLOperations.SubjectGrades> mySubjects = SQLOperations.getSubjectsByIdStudent(myProfile);
                 ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
 
@@ -84,6 +87,99 @@ namespace SINU.Pages
 
                 ViewInformationLiteral.Text += "</div>";
             }
+            else if(myProfile.id>=100000)
+            {
+                updatingstudentgrade.Visible = true;
+                List<SQLOperations.SubjectGrades> mySubjects = SQLOperations.getSubjectsByIdTeacher(myProfile);
+                ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
+
+                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                ViewInformationLiteral.Text += "<br><br><h2>Students to be graded</h2>";
+                foreach (var subject in mySubjects)
+                {
+                    if(subject.grade==0)
+                    {
+                        ViewInformationLiteral.Text += "<h4> Student with id: " + subject.name +
+                                                    " has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
+                    }
+                    
+                }
+                ViewInformationLiteral.Text += "<br><br><h2>Students already graded</h2>";
+                foreach (var subject in mySubjects)
+                {
+                    if (subject.grade > 0)
+                    {
+                        ViewInformationLiteral.Text += "<h4> Student with id: " + subject.name +
+                                                    " has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
+                    }
+
+                }
+                ViewInformationLiteral.Text += "<br><br></div>";
+                ViewInformationLiteral.Text += "</div>";
+
+            }
+            else
+            {
+                
+                ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
+
+                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;text-align:center\">";
+
+                    ViewInformationLiteral.Text += "<br><h2>IDs of current students</h2>";
+                    List<int> allStudents = SQLOperations.getAllStudentsID();
+                    int counter = 0;
+
+                    ViewInformationLiteral.Text += "<table>";
+                    foreach (var item in allStudents)
+                    {
+                        if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
+                    ViewInformationLiteral.Text += "<td>";
+                    ViewInformationLiteral.Text += "<h3>"+item.ToString()+ "</h3>";
+                    ViewInformationLiteral.Text += "</td>";
+                        if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
+                        counter++;
+                    }
+                    if(counter%5!=0) ViewInformationLiteral.Text += "</tr>";
+                    ViewInformationLiteral.Text += "</table>";
+
+                    ViewInformationLiteral.Text += "<br><h2>IDs of current Teachers</h2>";
+                    List<int> allTeachers = SQLOperations.getAllTeachersID();
+                    counter = 0;
+
+                    ViewInformationLiteral.Text += "<table>";
+                    foreach (var item in allStudents)
+                    {
+                        if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
+                        ViewInformationLiteral.Text += "<td>";
+                        ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3>";
+                        ViewInformationLiteral.Text += "</td>";
+                        if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
+                        counter++;
+                    }
+                    if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
+                    ViewInformationLiteral.Text += "</table>";
+
+                    ViewInformationLiteral.Text += "<br><h2>IDs of current working staff</h2>";
+                    List<int> allWorkingStaff = SQLOperations.getAllWorkingStaffID();
+                    counter = 0;
+
+                    ViewInformationLiteral.Text += "<table>";
+                    foreach (var item in allWorkingStaff)
+                    {
+                        if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
+                        ViewInformationLiteral.Text += "<td>";
+                        ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3>";
+                        ViewInformationLiteral.Text += "</td>";
+                        if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
+                        counter++;
+                    }
+                    if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
+                    ViewInformationLiteral.Text += "</table>";
+
+
+                ViewInformationLiteral.Text += "<br><br></div>";
+                ViewInformationLiteral.Text += "</div>";
+            }
 
             //Fill the update TextBoxes
             if (unchangedTextBoxesUpdate())
@@ -94,19 +190,51 @@ namespace SINU.Pages
                 TextBox12.Text = myProfile.lastname;
                 TextBox13.Text = myProfile.photo_url;
                 TextBox14.Text = myProfile.birth_date.ToString();
+                
             }
         }
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            updatingstudentgrade.Visible = false;
             Label1.Text = "";
+            Label4.Text = "";
             Label2.Text = "";
             Register_Panel.Visible = false;
             MyProfileLiteral.Text = "";
+            RegisterTeacherBtn.Visible = false;
 
             if (Session["email"] != null)
             {
+                if(SQLOperations.GetIdFromEmail(Session["email"].ToString())<100000)
+                {
 
-                ViewProfile();
+                    Login_Table.Visible = false;
+                    SessionDiv.Visible = false;
+                    Register_Panel.Visible = true;
+                    Label2.Text = "Enroll a new Teacher";
+                    RegisterRegisterPanelBtn.Visible = false;
+                    CancelRegisterPanelBtn.Visible = false;
+                    RegisterTeacherBtn.Visible = true;
+
+                    Label5.Text = "Type of Teacher:<br />" +
+                        "1. Lecturer<br />" +
+                        "2. Assistant Professor<br />" +
+                        "3. Associate Professor<br />" +
+                        "4. Professor<br />" +
+                        "5. Dean<br />" +
+                        "6. Chancellor<br />";
+
+                    //View all the teachers in a table
+                    //View all the Students in a table
+                    ViewProfile();
+
+                    
+                }
+                else
+                {
+                    ViewProfile();
+                }
             }
             else
             {
@@ -191,6 +319,7 @@ namespace SINU.Pages
         protected void RegisternBtn_Click(object sender, EventArgs e)
         {
             Login_Table.Visible = false;
+            Label5.Text = "Year:";
             Register_Panel.Visible = true;
             RegisterFormBtn.Focus();
         }
@@ -218,9 +347,37 @@ namespace SINU.Pages
             Label2.Text = "Something went wrong!";
             Label2.ForeColor = System.Drawing.Color.Red;
         }
+        private int GeneratedID(int min, int max)
+        {
+            SqlConnection con = new SqlConnection(SQLOperations.connectionString);
+            con.Open();
+            int generatedID;
+            bool isUnique;
+            Random newRandom = new Random();
+            do
+            {
+                generatedID = newRandom.Next(min, max);
+                SqlCommand cmd_search = new SqlCommand("select * from Users where id = @id", con);
+                cmd_search.Parameters.AddWithValue("@id", generatedID);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd_search);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                cmd_search.ExecuteNonQuery();
+
+                if (dt.Rows.Count > 0)
+                {
+                    isUnique = false;
+                }
+                else
+                {
+                    isUnique = true;
+                }
+            } while (isUnique == false);
+            con.Close();
+            return generatedID;
+        }
         protected void RegisterRegisterPanelBtn_Click(object sender, EventArgs e)
         {
-            //Textboxes from 3 to 8
             SqlConnection con = new SqlConnection(SQLOperations.connectionString);
             con.Open();
             SqlCommand cmd_email = new SqlCommand("select * from Users where email = @email", con);
@@ -236,7 +393,7 @@ namespace SINU.Pages
                 return;
             }
 
-            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email]) values(@id,@username,@password,@surname,@lastname,@email)", con);
+            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
 
             if (TextBox3.Text == "" || TextBox4.Text == "" || TextBox5.Text == "" ||
                 TextBox6.Text == "" || TextBox7.Text.Length < 8 || TextBox7.Text != TextBox8.Text)
@@ -258,31 +415,12 @@ namespace SINU.Pages
             cmd.Parameters.AddWithValue("@lastname", TextBox5.Text);
             cmd.Parameters.AddWithValue("@username", TextBox6.Text);
             cmd.Parameters.AddWithValue("@password", TextBox7.Text);
+            cmd.Parameters.AddWithValue("@photo_url","https://image.flaticon.com/icons/png/512/21/21294.png");
 
 
             var newRandom = new Random();
-            int generatedID;
-
-            bool isUnique;
-            do
-            {
-                generatedID = newRandom.Next(200000, 999999);
-                SqlCommand cmd_search = new SqlCommand("select * from Users where id = @id", con);
-                cmd_search.Parameters.AddWithValue("@id", generatedID);
-                sda = new SqlDataAdapter(cmd_search);
-                dt = new DataTable();
-                sda.Fill(dt);
-                cmd_search.ExecuteNonQuery();
-
-                if (dt.Rows.Count > 0)
-                {
-                    isUnique = false;
-                }
-                else
-                {
-                    isUnique = true;
-                }
-            } while (isUnique == false);
+            int generatedID = GeneratedID(200000,999999);
+            
             cmd.Parameters.AddWithValue("@id", generatedID);
 
             int rowsAdded = cmd.ExecuteNonQuery();
@@ -290,12 +428,60 @@ namespace SINU.Pages
 
             if (rowsAdded > 0)
             {
-                //add subjects to student
-
+                con.Open();
                 //add to student table
+                int student_year = 1;
+                if (TextBox18.Text != "") student_year = int.Parse(TextBox18.Text.ToString());
+                cmd = new SqlCommand("Insert into Student (id,year,info) values (@id,"+student_year+",1)", con);
+                cmd.Parameters.AddWithValue("@id", generatedID);
+                cmd.ExecuteNonQuery();
+
+                //add subjects to student
+                SqlCommand cmd_search = new SqlCommand("select TOP 1 id from Subjects_list order by id desc", con);
+                sda = new SqlDataAdapter(cmd_search);
+                dt = new DataTable();
+                sda.Fill(dt);
+                cmd_search.ExecuteNonQuery();
+                int nr_id_subjects_list = (int)dt.Rows[0][0]+1;
+                List<int> allSubjects = SQLOperations.getAllSubjectsIDByYear(student_year);
+                List<int> allTeachers = SQLOperations.getAllTeachersID();
+
+                for (int i=0;i<Math.Min(allSubjects.Count,allTeachers.Count); i++)
+                {
+                    cmd = new SqlCommand("insert into Subjects_list ([id], [id_student],[id_subject],[grade],[id_teacher]) values(@id,@id_student,@id_subject,NULL,@id_teacher)", con);
+                    cmd.Parameters.AddWithValue("@id_student", generatedID);
+                    cmd.Parameters.AddWithValue("@id", ++nr_id_subjects_list);
+                    cmd.Parameters.AddWithValue("@id_teacher", allTeachers[i]);
+                    cmd.Parameters.AddWithValue("@id_subject", allSubjects[i]);
+                    cmd.ExecuteNonQuery();
+                }
 
                 //add the student to series table
+                cmd_search = new SqlCommand("select id from Series order by id desc", con);
+                sda = new SqlDataAdapter(cmd_search);
+                dt = new DataTable();
+                sda.Fill(dt);
+                cmd_search.ExecuteNonQuery();
 
+                int id_Series_id = 0;
+                if (dt.Rows.Count > 0)
+                {
+                    id_Series_id = (int)dt.Rows[0][0] + 1;
+                }
+                else
+                {
+                    id_Series_id = 1;
+                }
+                cmd = new SqlCommand("insert into Series ([id], [id_student],[id_head_teacher],[id_series]) values(@id,@id_student,@id_teacher,@id_series)", con);
+                cmd.Parameters.AddWithValue("@id", id_Series_id);
+                cmd.Parameters.AddWithValue("@id_student", generatedID);
+                cmd.Parameters.AddWithValue("@id_teacher", 112345);
+                cmd.Parameters.AddWithValue("@id_series", newRandom.Next(1,3));
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+
+                //make the session and redirect
                 Session.Add("email", TextBox3.Text);
                 myProfile = SQLOperations.GetUserByEmail(TextBox3.Text);
                 Response.Redirect("MyAccount.aspx");
@@ -389,6 +575,96 @@ namespace SINU.Pages
                 }
             }
 
+        }
+        protected void UpdateGradesBtn_Click(object sender, EventArgs e)
+        {
+            //update the grade for the student with ID and Subject known
+            try
+            {
+
+                Label4.ForeColor = System.Drawing.Color.Black;
+                bool done = SQLOperations.UpdateStudentGrade(myProfile.id, Int32.Parse(TextBox15.Text.ToString()), TextBox16.Text, Int32.Parse(TextBox17.Text.ToString()));
+            }
+            catch
+            {
+                Label4.Text = "Something went wrong";
+                Label4.ForeColor = System.Drawing.Color.Red;
+            }
+            Response.Redirect("MyAccount.aspx");
+        }
+
+        protected void RegisterTeacherBtn_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(SQLOperations.connectionString);
+            con.Open();
+            SqlCommand cmd_email = new SqlCommand("select * from Users where email = @email", con);
+            cmd_email.Parameters.AddWithValue("@email", TextBox3.Text);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd_email);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            cmd_email.ExecuteNonQuery();
+
+            if (dt.Rows.Count > 0)
+            {
+                ErrorRegister();
+                return;
+            }
+
+            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
+
+            if (TextBox3.Text == "" || TextBox4.Text == "" || TextBox5.Text == "" ||
+                TextBox6.Text == "" || TextBox7.Text.Length < 8 || TextBox7.Text != TextBox8.Text)
+            {
+
+                ErrorRegister();
+                return;
+            }
+
+
+            if (!(ValidateCredentials(TextBox6.Text) && ValidateCredentials(TextBox7.Text)))
+            {
+                ErrorRegister();
+                return;
+            }
+
+            cmd.Parameters.AddWithValue("@email", TextBox3.Text);
+            cmd.Parameters.AddWithValue("@surname", TextBox4.Text);
+            cmd.Parameters.AddWithValue("@lastname", TextBox5.Text);
+            cmd.Parameters.AddWithValue("@username", TextBox6.Text);
+            cmd.Parameters.AddWithValue("@password", TextBox7.Text);
+            cmd.Parameters.AddWithValue("@photo_url", "https://image.flaticon.com/icons/png/512/21/21294.png");
+
+
+            var newRandom = new Random();
+            int generatedID = GeneratedID(100000,199999);
+
+            cmd.Parameters.AddWithValue("@id", generatedID);
+
+            int rowsAdded = cmd.ExecuteNonQuery();
+            con.Close();
+
+            if (rowsAdded > 0)
+            {
+                con.Open();
+                int type_of_teacher;
+                if (TextBox18.Text == "" || int.Parse(TextBox18.Text.ToString()) > 6) type_of_teacher = 1;
+                else type_of_teacher = int.Parse(TextBox18.Text.ToString());
+                cmd = new SqlCommand("Insert into Employees (id,salary, status, seniority) values (@id, @salary,@status,1)", con);
+                cmd.Parameters.AddWithValue("@id", generatedID);
+                cmd.Parameters.AddWithValue("@salary", (type_of_teacher-1)*1500+3500);
+                cmd.Parameters.AddWithValue("@status", type_of_teacher);
+                cmd.ExecuteNonQuery();
+                cmd = new SqlCommand("Insert into Teachers (id,job, publications,PhD,Phd_Certificate) values (@id,1,NULL,NULL,NULL)", con);
+                cmd.Parameters.AddWithValue("@id", generatedID);
+                cmd.ExecuteNonQuery();
+                con.Close();
+                Response.Redirect("MyAccount.aspx");
+            }
+            else
+            {
+                ErrorRegister();
+                return;
+            }
         }
     }
 }

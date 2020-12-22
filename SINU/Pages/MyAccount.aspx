@@ -30,12 +30,12 @@
         .auto-style5 {
             text-align: right;
             height: 26px;
-            width: 134px;
+            width: 600px;
         }
 
         .auto-style8 {
             text-align: right;
-            width: 134px;
+            width: 600px;
         }
 
         .auto-style9 {
@@ -61,6 +61,16 @@
         .auto-style13 {
             height: 26px;
         }
+        .auto-style14 {
+            text-align: right;
+        }
+        .auto-style15 {
+            width: 90%;
+        }
+        table
+        {
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +90,39 @@
                 <asp:Literal ID="MyProfileLiteral" runat="server"></asp:Literal>
                 <br />
                 <br />
+                <div id= "updatingstudentgrade" runat="server" style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white">
+                 <table style="margin-left: 5%; margin-right: 5%;" class="auto-style15">
+                      <tr>
+                        <td class="auto-style14"></td>
+                        <td class="auto-style9">
+                            <asp:Label ID="Label4" runat="server"></asp:Label>
+                          </td>
+                        <td class="auto-style9"></td>
+                    </tr>
+                    <tr>
+                        <td class="auto-style10">Student Id:</td>
+                        <td class="auto-style9">
+                            <asp:TextBox ID="TextBox15" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
+                        </td>
+                    </tr>
+                      <tr>
+                        <td class="auto-style10">Subject:</td>
+                        <td class="auto-style9">
+                            <asp:TextBox ID="TextBox16" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
+                        </td>
+                    </tr>
+                      <tr>
+                        <td class="auto-style10">New Grade:</td>
+                        <td class="auto-style9">
+                            <asp:TextBox ID="TextBox17" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
+                        </td>
+                    </tr>
+                </table>
+                    
+                <asp:Button ID="UpdateGradesBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="UpdateGradesBtn_Click" Text="Update the grades" Height="60px" Width="90%" Style="margin-left: 5%; margin-right: 5%;" />
+                <br />
+                    </div>
+                <br />
                 <asp:Literal ID="ViewInformationLiteral" runat="server"></asp:Literal>
                 <br />
                 <br />
@@ -97,37 +140,37 @@
                     <tr>
                         <td class="auto-style8">Username:</td>
                         <td class="auto-style9">
-                            <asp:TextBox ID="TextBox9" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox9" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td class="auto-style8">Password:</td>
                         <td class="auto-style9">
-                            <asp:TextBox ID="TextBox10" TextMode="Password" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox10" TextMode="Password" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td class="auto-style8">Surname</td>
                         <td class="auto-style9">
-                            <asp:TextBox ID="TextBox11" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox11" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td class="auto-style8">Lastname:</td>
                         <td class="auto-style9">
-                            <asp:TextBox ID="TextBox12" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox12" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td class="auto-style5">Photo:</td>
                         <td class="auto-style10">
-                            <asp:TextBox ID="TextBox13" runat="server" Width="500px" TextMode="Url"></asp:TextBox>
+                            <asp:TextBox ID="TextBox13" runat="server" Width="500px" TextMode="Url" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                     </tr>
                     <tr>
                         <td class="auto-style8">Birth:</td>
                         <td class="auto-style9">
-                            <asp:TextBox ID="TextBox14" runat="server" Width="500px"></asp:TextBox>
+                            <asp:TextBox ID="TextBox14" runat="server" Width="500px" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                             (Format dd-mm-yyyy)</td>
                     </tr>
                     <tr>
@@ -170,14 +213,14 @@
                     <tr>
                         <td class="style2">Email:</td>
                         <td>
-                            <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox1" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="style2">Password:</td>
                         <td>
-                            <asp:TextBox ID="TextBox2" TextMode="Password" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox2" TextMode="Password" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
@@ -211,42 +254,51 @@
                     <tr>
                         <td class="style2">Email:</td>
                         <td>
-                            <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox3" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td class="style2">Surname:</td>
-                        <td>
-                            <asp:TextBox ID="TextBox4" runat="server"></asp:TextBox>
+                        <td class="auto-style12">Surname:</td>
+                        <td class="auto-style13">
+                            <asp:TextBox ID="TextBox4" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
-                        <td>&nbsp;</td>
+                        <td class="auto-style13"></td>
                     </tr>
                     <tr>
                         <td class="style2">Lastname:</td>
                         <td>
-                            <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox5" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="auto-style12">Username:</td>
                         <td class="auto-style13">
-                            <asp:TextBox ID="TextBox6" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox6" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td class="auto-style13"></td>
                     </tr>
                     <tr>
                         <td class="style2">Password:</td>
                         <td>
-                            <asp:TextBox ID="TextBox7" TextMode="Password" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox7" TextMode="Password" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="style2">Confirm password:</td>
                         <td>
-                            <asp:TextBox ID="TextBox8" TextMode="Password" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="TextBox8" TextMode="Password" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="style2">
+                            <asp:Label ID="Label5" runat="server" Text="Label"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="TextBox18" type="number" runat="server" BackColor="White" BorderStyle="Groove"></asp:TextBox>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
@@ -255,6 +307,7 @@
                         <td>
                             <asp:Button ID="RegisterRegisterPanelBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="RegisterRegisterPanelBtn_Click" Text="Register" Width="100px" />
                             <asp:Button ID="CancelRegisterPanelBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="CancelRegisterPanelBtn_Click" Text="Cancel" Width="100px" />
+                            <asp:Button ID="RegisterTeacherBtn" runat="server" BackColor="White" BorderStyle="Groove" OnClick="RegisterTeacherBtn_Click" Text="Register" Width="100px" />
                             <br />
                         </td>
                         <td></td>
