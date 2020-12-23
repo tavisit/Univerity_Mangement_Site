@@ -18,6 +18,10 @@
 
 This project is an web-based university management system as a result of an project assignment for the Database Course as part of the mandatory curriculum of Automatization and Computers Faculty of Technical University of Cluj-Napoca. 
 
+The inspiration came from a similar system actually deployed to fit my university needs, but some key features in the backend were missing, so I tried to implement a basic functionality of them.
+
+This is a demo and shall be treated as one, as I don't own any copyright on the images I used and information stored in the database.
+
 ### Features
 
 #### There are 4 types of accounts: Student, Teacher, Worker and Admin with various privileges and features
@@ -32,6 +36,7 @@ This project is an web-based university management system as a result of an proj
 * The home page has information scrapped using HTML Agility Pack, including announcements from the Automatics and Computers Faculty website and news from the TUCN website
 * Registration possible only for the student type, the Teacher/Worker account will be added by Admin
 * Dorm payments automatically updated every month
+* For every user, only the ID is visible, in order to garantee the application of the European GDPR laws and rules regarding the personal information usage.
 
 ## To do List
 
