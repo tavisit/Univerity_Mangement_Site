@@ -1,11 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI;
+using System.IO;
 
 namespace SINU.Pages
 {
     public partial class Home : System.Web.UI.Page
     {
+        private void ChangeDormPayment()
+        {
+            int today = DateTime.Now.Day;
+            string location = AppDomain.CurrentDomain.BaseDirectory+@"DormInformation.txt";
+
+            string text;
+            if (!(File.Exists(location)))
+            {
+                File.CreateText(location);
+                text = "unpayed";
+            }
+            else
+            {
+                text = File.ReadAllText(location);
+
+                if(text == "unpayed"&& today>=2)
+                {
+                    return;
+                }
+            }
+
+            if (today == 1 && text=="unpayed")
+            {
+                SQLOperations.IncreaseByOneMonthDorm();
+                text = "payed";
+            }
+            else if(today >= 2)
+            {
+                text = "unpayed";
+            }
+
+            File.WriteAllText(location, text);
+
+        }
         private void ViewProfile()
         {
             SINU.User myProfile = SQLOperations.GetUserByEmail(Session["email"].ToString().Replace(" ", ""));
@@ -133,6 +168,7 @@ namespace SINU.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            ChangeDormPayment();
             if (Session["email"] != null)
             {
 
