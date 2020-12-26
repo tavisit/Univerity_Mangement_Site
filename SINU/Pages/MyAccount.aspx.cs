@@ -110,8 +110,8 @@ namespace SINU.Pages
                 {
                     if(subject.grade==0)
                     {
-                        ViewInformationLiteral.Text += "<h4> Student with id: " + subject.name +
-                                                    " has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
+                        ViewInformationLiteral.Text += "<h4> Student with id: <a href= \"Profile.aspx\\" + subject.id + "\" >" + subject.name +
+                                                    "</a> has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
                     }
                     
                 }
@@ -120,8 +120,8 @@ namespace SINU.Pages
                 {
                     if (subject.grade > 0)
                     {
-                        ViewInformationLiteral.Text += "<h4> Student with id: " + subject.name +
-                                                    " has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
+                        ViewInformationLiteral.Text += "<h4> Student with id: <a href= \"Profile.aspx\\" + subject.id + "\" >" + subject.name +
+                                                    "</a> has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
                     }
 
                 }
@@ -145,7 +145,8 @@ namespace SINU.Pages
                     {
                         if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
                     ViewInformationLiteral.Text += "<td>";
-                    ViewInformationLiteral.Text += "<h3>"+item.ToString()+ "</h3>";
+                    ViewInformationLiteral.Text += "<a href= \"Profile.aspx\\" + item + "\" >";
+                    ViewInformationLiteral.Text += "<h3>"+item.ToString()+ "</h3></a>";
                     ViewInformationLiteral.Text += "</td>";
                         if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
                         counter++;

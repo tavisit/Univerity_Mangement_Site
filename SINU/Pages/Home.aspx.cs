@@ -79,6 +79,7 @@ namespace SINU.Pages
                     {
                         if (counter % 3 == 0) MyProfileLiteral.Text += "<tr>";
                         MyProfileLiteral.Text += "<td >";
+                        MyProfileLiteral.Text += "<a href= \"Profile.aspx\\"+myCollegue.id+"\" >";
                         MyProfileLiteral.Text += "<h3>" + myCollegue.surname + " " + myCollegue.lastname + " </h3>";
                         MyProfileLiteral.Text += "<img border=\"0\" src=" + myCollegue.photo_url + " alt=" + myCollegue.surname + " " + myCollegue.lastname + "width = \"300px\" height = \"300px\"></a>";
                         MyProfileLiteral.Text += "</td>";

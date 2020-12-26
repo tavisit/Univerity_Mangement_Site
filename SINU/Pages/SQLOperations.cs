@@ -9,13 +9,15 @@ namespace SINU.Pages
     {
         public struct SubjectGrades
         {
+            public int id { get; set; }
             public string name { get; set; }
             public string surname { get; set; }
             public string subjectName { get; set; }
             public int credits { get; set; }
             public int grade { get; set; }
-            public SubjectGrades(string name, string surname, string subjectName, int credits, int grade)
+            public SubjectGrades(int id,string name, string surname, string subjectName, int credits, int grade)
             {
+                this.id = id;
                 this.name = name;
                 this.surname = surname;
                 this.subjectName = subjectName;
@@ -368,6 +370,86 @@ namespace SINU.Pages
                 return -1;
             }
         }
+        public static User GetUserById(int id)
+        {
+            User myProfileTemp = new User();
+            myProfileTemp.id = -1;
+
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand sqlConn;
+            sqlConn = new SqlCommand("select * from Users where id = @id", con);
+            sqlConn.Parameters.AddWithValue("@id", id);
+            SqlDataAdapter sda = new SqlDataAdapter(sqlConn);
+            DataTable dt = new DataTable();
+
+            try
+            {
+                sda.Fill(dt);
+                con.Open();
+                sqlConn.ExecuteNonQuery();
+                con.Close();
+            }
+            catch
+            {
+                return null;
+            }
+
+            if (dt.Rows.Count > 0)
+            {
+                myProfileTemp.id = (int)dt.Rows[0][0];
+                myProfileTemp.username = dt.Rows[0][1].ToString();
+                myProfileTemp.password = dt.Rows[0][2].ToString();
+                myProfileTemp.surname = dt.Rows[0][3].ToString();
+                myProfileTemp.lastname = dt.Rows[0][4].ToString();
+                myProfileTemp.email = dt.Rows[0][7].ToString();
+                if (dt.Rows[0][6].ToString() == "")
+                    myProfileTemp.photo_url = "https://image.flaticon.com/icons/png/512/21/21294.png";
+                else
+                    myProfileTemp.photo_url = (string)dt.Rows[0][6].ToString().Replace(" ", "");
+                if (dt.Rows[0][5].ToString() == "")
+                    myProfileTemp.birth_date = DateTime.Parse("01-01-2000");
+                else
+                    myProfileTemp.birth_date = DateTime.Parse(dt.Rows[0][5].ToString());
+
+                con = new SqlConnection(connectionString);
+                sqlConn = new SqlCommand("Select Univ_info.specialization from Univ_info Join Student on Student.info = Univ_info.id where Student.id = @id", con);
+                sqlConn.Parameters.AddWithValue("@id", myProfileTemp.id);
+                sda = new SqlDataAdapter(sqlConn);
+                dt = new DataTable();
+
+                try
+                {
+                    sda.Fill(dt);
+                    con.Open();
+                    sqlConn.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch
+                {
+                    return null;
+                }
+
+                if (dt.Rows.Count > 0)
+                {
+                    myProfileTemp.Student = new Student
+                    {
+                        Univ_info = new Univ_info()
+                    };
+                    myProfileTemp.Student.Univ_info.specialization = dt.Rows[0][0].ToString().Replace(" ", "");
+                    // get info about the student
+                }
+                else
+                {
+                    myProfileTemp.Employee = new Employee
+                    {
+                        Teacher = new Teacher(),
+                        Working_staff = new Working_staff()
+                    };
+                    //get info about the teacher/working
+                }
+            }
+            return myProfileTemp;
+        }
         public static User GetUserByEmail(string conditions)
         {
             User myProfileTemp = new User();
@@ -487,7 +569,7 @@ namespace SINU.Pages
                         dt.Rows[i][2] = 0;
                     }
 
-                    SubjectGrades currentSubjects = new SubjectGrades(myUser.lastname, myUser.surname, dt.Rows[i][0].ToString(), (int)dt.Rows[i][1], (int)dt.Rows[i][2]);
+                    SubjectGrades currentSubjects = new SubjectGrades(myUser.id,myUser.lastname, myUser.surname, dt.Rows[i][0].ToString(), (int)dt.Rows[i][1], (int)dt.Rows[i][2]);
                     mySubjects.Add(currentSubjects);
                 }
             }
@@ -504,7 +586,7 @@ namespace SINU.Pages
             try
             {
                 SqlConnection con = new SqlConnection(connectionString);
-                SqlCommand sqlConn = new SqlCommand("Select Subjects_list.id_student,Subjects.name, Subjects.credits,Subjects_list.grade, Subjects_list.id_teacher " +
+                SqlCommand sqlConn = new SqlCommand("Select Subjects_list.id_student,Subjects.name, Subjects.credits,Subjects_list.grade, Subjects_list.id_teacher, Subjects_list.id_student " +
                                                     "from Subjects_list " +
                                                     "Join SUbjects on Subjects_list.id_subject = Subjects.id " +
                                                     "Join Users on Users.id = Subjects_list.id_student " +
@@ -538,7 +620,7 @@ namespace SINU.Pages
                         }
 
 
-                        SubjectGrades currentSubjects = new SubjectGrades(dt.Rows[i][0].ToString(), null, dt.Rows[i][1].ToString(), (int)dt.Rows[i][2], (int)dt.Rows[i][3]);
+                        SubjectGrades currentSubjects = new SubjectGrades((int)dt.Rows[i][5],dt.Rows[i][0].ToString(), null, dt.Rows[i][1].ToString(), (int)dt.Rows[i][2], (int)dt.Rows[i][3]);
                         mySubjects.Add(currentSubjects);
                     }
 
