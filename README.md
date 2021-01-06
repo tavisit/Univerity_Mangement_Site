@@ -40,12 +40,12 @@ In this section there will be presented the key features of the system developed
 * Registration possible only for the student type, the Teacher/Worker account will be added by Admin
 * Dorm payments automatically updated every month
 * For every user, only the ID is visible, in order to garantee the application of the European GDPR laws and rules regarding the personal information usage.
+* Custom profile for every account accessable from student's collegues section and their teacher
+* Fake payment of the dorm, its value increasing each month
 
 ## To do List
 
 * Encryption of the Database
-* Custom profile for every account accessable from student's collegues section
-* Payment of the dorm
 * Worker account
 * Beautify the website
 * Custom announcements to the student/teacher faculty
