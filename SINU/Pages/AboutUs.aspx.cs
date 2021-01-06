@@ -7,7 +7,7 @@ namespace SINU.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Literal1.Text = ReadMeParser.AboutUsFromReadMe();
         }
         protected void HomeImageButton_click(object sender, ImageClickEventArgs e)
         {

@@ -15,7 +15,7 @@ namespace SINU.Pages
             public string subjectName { get; set; }
             public int credits { get; set; }
             public int grade { get; set; }
-            public SubjectGrades(int id,string name, string surname, string subjectName, int credits, int grade)
+            public SubjectGrades(int id, string name, string surname, string subjectName, int credits, int grade)
             {
                 this.id = id;
                 this.name = name;
@@ -33,7 +33,8 @@ namespace SINU.Pages
         public static bool insertTeacher(User myUser, int type_of_teacher)
         {
             SqlConnection con = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
+            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) " +
+                                            "values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
             cmd.Parameters.AddWithValue("@email", myUser.email);
             cmd.Parameters.AddWithValue("@surname", myUser.surname);
             cmd.Parameters.AddWithValue("@lastname", myUser.lastname);
@@ -85,12 +86,13 @@ namespace SINU.Pages
             else
             {
                 return false;
-            } 
+            }
         }
         public static bool insertStudent(User myUser, int years, bool dorm)
         {
             SqlConnection con = new SqlConnection(connectionString);
-            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
+            SqlCommand cmd = new SqlCommand("insert into Users ([id], [username],[password],[surname],[lastname],[email],[photo_url]) " +
+                                            "values(@id,@username,@password,@surname,@lastname,@email,@photo_url)", con);
             cmd.Parameters.AddWithValue("@email", myUser.email);
             cmd.Parameters.AddWithValue("@surname", myUser.surname);
             cmd.Parameters.AddWithValue("@lastname", myUser.lastname);
@@ -136,20 +138,21 @@ namespace SINU.Pages
 
                     return false;
                 }
-                
+
                 int nr_id_subjects_list = (int)dt.Rows[0][0] + 1;
                 List<int> allSubjects = GetAllByCriteriaClass.getAllSubjectsIDByYear(years);
                 List<int> allTeachers = GetAllByCriteriaClass.getAllTeachersID();
 
                 for (int i = 0; i < Math.Min(allSubjects.Count, allTeachers.Count); i++)
                 {
-                    cmd = new SqlCommand("insert into Subjects_list ([id], [id_student],[id_subject],[grade],[id_teacher]) values(@id,@id_student,@id_subject,NULL,@id_teacher)", con);
+                    cmd = new SqlCommand("insert into Subjects_list ([id], [id_student],[id_subject],[grade],[id_teacher]) " +
+                                         "values(@id,@id_student,@id_subject,NULL,@id_teacher)", con);
                     cmd.Parameters.AddWithValue("@id_student", myUser.id);
                     cmd.Parameters.AddWithValue("@id", ++nr_id_subjects_list);
                     cmd.Parameters.AddWithValue("@id_teacher", allTeachers[i]);
                     cmd.Parameters.AddWithValue("@id_subject", allSubjects[i]);
                     cmd.ExecuteNonQuery();
-                    
+
                 }
 
                 //add the student to series table
@@ -169,7 +172,8 @@ namespace SINU.Pages
                     id_Series_id = 1;
                 }
 
-                cmd = new SqlCommand("insert into Series ([id], [id_student],[id_head_teacher],[id_series]) values(@id,@id_student,@id_teacher,@id_series)", con);
+                cmd = new SqlCommand("insert into Series ([id], [id_student],[id_head_teacher],[id_series]) " +
+                                     "values(@id,@id_student,@id_teacher,@id_series)", con);
                 cmd.Parameters.AddWithValue("@id", id_Series_id);
                 cmd.Parameters.AddWithValue("@id_student", myUser.id);
                 cmd.Parameters.AddWithValue("@id_teacher", 112345);
@@ -469,7 +473,7 @@ namespace SINU.Pages
                 sqlConn.ExecuteNonQuery();
                 con.Close();
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -530,6 +534,34 @@ namespace SINU.Pages
             }
             return myProfileTemp;
         }
+        public static List<int> GetTeacherByIdStudent(int id)
+        {
+            List<int> myTeachers = new List<int>();
+            SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand sqlConn = new SqlCommand("Select Distinct id_teacher from Subjects_list where id_student = @id_student", con);
+            sqlConn.Parameters.AddWithValue("@id_student", id);
+            SqlDataAdapter sda = new SqlDataAdapter(sqlConn);
+            DataTable dt = new DataTable();
+
+            try
+            {
+                sda.Fill(dt);
+                con.Open();
+                sqlConn.ExecuteNonQuery();
+                con.Close();
+            }
+            catch
+            {
+                return null;
+            }
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                myTeachers.Add((int)dt.Rows[i][0]);
+            }
+
+            return myTeachers;
+        }
         public static List<SubjectGrades> getSubjectsByIdStudent(SINU.User myUser)
         {
 
@@ -569,7 +601,7 @@ namespace SINU.Pages
                         dt.Rows[i][2] = 0;
                     }
 
-                    SubjectGrades currentSubjects = new SubjectGrades(myUser.id,myUser.lastname, myUser.surname, dt.Rows[i][0].ToString(), (int)dt.Rows[i][1], (int)dt.Rows[i][2]);
+                    SubjectGrades currentSubjects = new SubjectGrades(myUser.id, myUser.lastname, myUser.surname, dt.Rows[i][0].ToString(), (int)dt.Rows[i][1], (int)dt.Rows[i][2]);
                     mySubjects.Add(currentSubjects);
                 }
             }
@@ -620,7 +652,7 @@ namespace SINU.Pages
                         }
 
 
-                        SubjectGrades currentSubjects = new SubjectGrades((int)dt.Rows[i][5],dt.Rows[i][0].ToString(), null, dt.Rows[i][1].ToString(), (int)dt.Rows[i][2], (int)dt.Rows[i][3]);
+                        SubjectGrades currentSubjects = new SubjectGrades((int)dt.Rows[i][5], dt.Rows[i][0].ToString(), null, dt.Rows[i][1].ToString(), (int)dt.Rows[i][2], (int)dt.Rows[i][3]);
                         mySubjects.Add(currentSubjects);
                     }
 
@@ -686,13 +718,13 @@ namespace SINU.Pages
 
                     command.Parameters.AddWithValue("@birth_date", profile.birth_date);
 
-                    if (profile.photo_url == null||profile.photo_url=="")
+                    if (profile.photo_url == null || profile.photo_url == "")
                         profile.photo_url = "https://image.flaticon.com/icons/png/512/21/21294.png";
                     command.Parameters.AddWithValue("@photo_url", profile.photo_url);
 
                     try
                     {
-                        command.ExecuteNonQuery();                       
+                        command.ExecuteNonQuery();
                     }
                     catch
                     {

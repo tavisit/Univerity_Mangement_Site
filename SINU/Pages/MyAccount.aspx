@@ -90,7 +90,7 @@
                 <asp:Button ID="Button2" runat="server" Height="50px" OnClick="MyAccount_click" Text="MyAccount" Width="33%" BackColor="White" BorderStyle="Groove" Font-Bold="True" />
             </div>
         </div>
-        <div style="margin-left: auto; margin-right: auto; width: 80%; background-color: purple; margin-top: 120px;">
+        <div style="margin-left: auto; margin-right: auto; width: 60%; background-color: purple; margin-top: 120px;">
             <br />
             <br />
             <div class="auto-style11" runat="server" id="SessionDiv">
@@ -167,13 +167,6 @@
                     
                <br />
                     </div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
                 <br />
                 <br />
                 <br />

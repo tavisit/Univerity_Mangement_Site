@@ -64,7 +64,7 @@ namespace SINU.Pages
                 ScrappedInfo currentItem = new ScrappedInfo(item_url, item_img_url, item_text);
                 scrappedInfo.Add(currentItem);
 
-                if(currentNumberOfNews>=howMany)
+                if (currentNumberOfNews >= howMany)
                 {
                     break;
                 }

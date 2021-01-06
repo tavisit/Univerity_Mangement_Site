@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace SINU.Pages
 {
@@ -46,59 +45,52 @@ namespace SINU.Pages
             SessionDiv.Visible = true;
 
             //Fill the Literal with info
-            MyProfileLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
-            MyProfileLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-            MyProfileLiteral.Text += "<br><h1 style=\"text-align:center;\">" + myProfile.surname + " " + myProfile.lastname + "</h1>";
-            if (myProfile.id > 200000) MyProfileLiteral.Text += "</br><h1 style=\"text-align:center;\">Specialization: " + myProfile.Student.Univ_info.specialization + "</h1></br>";
-            MyProfileLiteral.Text += "<img style = \"margin-left: auto;margin-right: auto;display: block;\" border=\"0\" src=" + myProfile.photo_url + " width = \"250px\" height = \"250px\">";
-            MyProfileLiteral.Text += "<br><br></div>";
-            MyProfileLiteral.Text += "</div>";
-
+            MyProfileLiteral.Text = UsefulHtmlStuff.generalInfo(myProfile);
             //Fill the courses literal
             if (myProfile.id > 200000)
             {
-                
+
                 List<SQLOperations.SubjectGrades> mySubjects = SQLOperations.getSubjectsByIdStudent(myProfile);
                 ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
 
-                    ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-                    ViewInformationLiteral.Text += "<br><br><h2>Current Exams</h2>";
-                    foreach (var subject in mySubjects)
+                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                ViewInformationLiteral.Text += "<br><br><h2>Current Exams</h2>";
+                foreach (var subject in mySubjects)
+                {
+                    if (subject.grade == 0)
                     {
-                        if (subject.grade == 0)
-                        {
-                            ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark is: Currently Taking It</h4>";
-                        }
+                        ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark is: Currently Taking It</h4>";
                     }
-                    ViewInformationLiteral.Text += "<br><br></div>";
+                }
+                ViewInformationLiteral.Text += "<br><br></div>";
 
-                    ViewInformationLiteral.Text += "<div style = \"height:30px;background-color:purple;\"></div>";
+                ViewInformationLiteral.Text += "<div style = \"height:30px;background-color:purple;\"></div>";
 
-                    ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-                    ViewInformationLiteral.Text += "<br><br><h2>Taken and passed exams</h2>";
-                    foreach (var subject in mySubjects)
+                ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
+                ViewInformationLiteral.Text += "<br><br><h2>Taken and passed exams</h2>";
+                foreach (var subject in mySubjects)
+                {
+                    if (subject.grade > 0)
                     {
-                        if (subject.grade > 0)
-                        {
-                            ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark was: " + subject.grade + "</h4>";
-                        }
+                        ViewInformationLiteral.Text += "<h4> At " + subject.subjectName + " with " + subject.credits + " credits, the mark was: " + subject.grade + "</h4>";
                     }
-                    ViewInformationLiteral.Text += "<br><br></div>";
+                }
+                ViewInformationLiteral.Text += "<br><br></div>";
 
-                    int dorm_payment = SQLOperations.getStudentDorm(myProfile.id);
-                    if(dorm_payment>0)
-                    {
-                        pay_the_dorm_div.Visible = true;
-                        Label6.Text = "Total amount of " + dorm_payment * 200 + " lei for " + dorm_payment + " months";
-                    }
-                    else
-                    {
-                        pay_the_dorm_div.Visible = false;
-                    }
-                    
+                int dorm_payment = SQLOperations.getStudentDorm(myProfile.id);
+                if (dorm_payment > 0)
+                {
+                    pay_the_dorm_div.Visible = true;
+                    Label6.Text = "Total amount of " + dorm_payment * 200 + " lei for " + dorm_payment + " months";
+                }
+                else
+                {
+                    pay_the_dorm_div.Visible = false;
+                }
+
                 ViewInformationLiteral.Text += "</div>";
             }
-            else if(myProfile.id>=100000)
+            else if (myProfile.id >= 100000)
             {
                 updatingstudentgrade.Visible = true;
                 List<SQLOperations.SubjectGrades> mySubjects = SQLOperations.getSubjectsByIdTeacher(myProfile);
@@ -108,12 +100,12 @@ namespace SINU.Pages
                 ViewInformationLiteral.Text += "<br><br><h2>Students to be graded</h2>";
                 foreach (var subject in mySubjects)
                 {
-                    if(subject.grade==0)
+                    if (subject.grade == 0)
                     {
                         ViewInformationLiteral.Text += "<h4> Student with id: <a href= \"Profile.aspx\\" + subject.id + "\" >" + subject.name +
                                                     "</a> has at " + subject.subjectName + " the grade " + subject.grade.ToString() + "</h4>";
                     }
-                    
+
                 }
                 ViewInformationLiteral.Text += "<br><br><h2>Students already graded</h2>";
                 foreach (var subject in mySubjects)
@@ -131,62 +123,64 @@ namespace SINU.Pages
             }
             else
             {
-                
+
                 ViewInformationLiteral.Text = "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
 
                 ViewInformationLiteral.Text += "<div style = \"margin-left: 5%;margin-right:5%;text-align:center\">";
 
-                    ViewInformationLiteral.Text += "<br><h2>IDs of current students</h2>";
-                    List<int> allStudents = GetAllByCriteriaClass.getAllStudentsID();
-                    int counter = 0;
+                ViewInformationLiteral.Text += "<br><h2>IDs of current students</h2>";
+                List<int> allStudents = GetAllByCriteriaClass.getAllStudentsID();
+                int counter = 0;
 
-                    ViewInformationLiteral.Text += "<table>";
-                    foreach (var item in allStudents)
-                    {
-                        if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
+                ViewInformationLiteral.Text += "<table>";
+                foreach (var item in allStudents)
+                {
+                    if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
                     ViewInformationLiteral.Text += "<td>";
                     ViewInformationLiteral.Text += "<a href= \"Profile.aspx\\" + item + "\" >";
-                    ViewInformationLiteral.Text += "<h3>"+item.ToString()+ "</h3></a>";
+                    ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3></a>";
                     ViewInformationLiteral.Text += "</td>";
-                        if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
-                        counter++;
-                    }
-                    if(counter%5!=0) ViewInformationLiteral.Text += "</tr>";
-                    ViewInformationLiteral.Text += "</table>";
+                    if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
+                    counter++;
+                }
+                if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
+                ViewInformationLiteral.Text += "</table>";
 
-                    ViewInformationLiteral.Text += "<br><h2>IDs of current Teachers</h2>";
-                    List<int> allTeachers = GetAllByCriteriaClass.getAllTeachersID();
-                    counter = 0;
+                ViewInformationLiteral.Text += "<br><h2>IDs of current Teachers</h2>";
+                List<int> allTeachers = GetAllByCriteriaClass.getAllTeachersID();
+                counter = 0;
 
-                    ViewInformationLiteral.Text += "<table>";
-                    foreach (var item in allStudents)
-                    {
-                        if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
-                        ViewInformationLiteral.Text += "<td>";
-                        ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3>";
-                        ViewInformationLiteral.Text += "</td>";
-                        if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
-                        counter++;
-                    }
-                    if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
-                    ViewInformationLiteral.Text += "</table>";
+                ViewInformationLiteral.Text += "<table>";
+                foreach (var item in allTeachers)
+                {
+                    if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
+                    ViewInformationLiteral.Text += "<td>";
+                    ViewInformationLiteral.Text += "<a href= \"Profile.aspx\\" + item + "\" >";
+                    ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3>";
+                    ViewInformationLiteral.Text += "</td>";
+                    if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
+                    counter++;
+                }
+                if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
+                ViewInformationLiteral.Text += "</table>";
 
-                    ViewInformationLiteral.Text += "<br><h2>IDs of current working staff</h2>";
-                    List<int> allWorkingStaff = GetAllByCriteriaClass.getAllWorkingStaffID();
-                    counter = 0;
+                ViewInformationLiteral.Text += "<br><h2>IDs of current working staff</h2>";
+                List<int> allWorkingStaff = GetAllByCriteriaClass.getAllWorkingStaffID();
+                counter = 0;
 
-                    ViewInformationLiteral.Text += "<table>";
-                    foreach (var item in allWorkingStaff)
-                    {
-                        if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
-                        ViewInformationLiteral.Text += "<td>";
-                        ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3>";
-                        ViewInformationLiteral.Text += "</td>";
-                        if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
-                        counter++;
-                    }
-                    if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
-                    ViewInformationLiteral.Text += "</table>";
+                ViewInformationLiteral.Text += "<table>";
+                foreach (var item in allWorkingStaff)
+                {
+                    if (counter % 5 == 0) ViewInformationLiteral.Text += "<tr>";
+                    ViewInformationLiteral.Text += "<td>";
+                    ViewInformationLiteral.Text += "<a href= \"Profile.aspx\\" + item + "\" >";
+                    ViewInformationLiteral.Text += "<h3>" + item.ToString() + "</h3>";
+                    ViewInformationLiteral.Text += "</td>";
+                    if (counter % 5 == 4) ViewInformationLiteral.Text += "</tr>";
+                    counter++;
+                }
+                if (counter % 5 != 0) ViewInformationLiteral.Text += "</tr>";
+                ViewInformationLiteral.Text += "</table>";
 
 
                 ViewInformationLiteral.Text += "<br><br></div>";
@@ -202,7 +196,7 @@ namespace SINU.Pages
                 TextBox12.Text = myProfile.lastname;
                 TextBox13.Text = myProfile.photo_url;
                 TextBox14.Text = myProfile.birth_date.ToString();
-                
+
             }
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -220,7 +214,7 @@ namespace SINU.Pages
 
             if (Session["email"] != null)
             {
-                if(SQLOperations.GetIdFromEmail(Session["email"].ToString())<100000)
+                if (SQLOperations.GetIdFromEmail(Session["email"].ToString()) < 100000)
                 {
 
                     Login_Table.Visible = false;
@@ -243,7 +237,7 @@ namespace SINU.Pages
                     //View all the Students in a table
                     ViewProfile();
 
-                    
+
                 }
                 else
                 {
@@ -302,6 +296,8 @@ namespace SINU.Pages
 
             if (!(ValidateCredentials(TextBox2.Text)))
             {
+                TextBox1.Text = "";
+                TextBox2.Text = "";
                 Label1.Text = "Your email and password is incorrect";
                 Label1.ForeColor = System.Drawing.Color.Red;
                 return;
@@ -484,7 +480,7 @@ namespace SINU.Pages
             SqlConnection con = new SqlConnection(SQLOperations.connectionString);
             User myUser = SQLOperations.GetUserByEmail(Session["email"].ToString());
 
-            if (myUser!=null)
+            if (myUser != null)
             {
                 bool deletion_completed = SQLOperations.DeleteByID(myUser.id);
                 if (deletion_completed == true)
@@ -535,7 +531,7 @@ namespace SINU.Pages
                 ErrorRegister();
                 return;
             }
-            
+
             int type_of_teacher;
             if (TextBox18.Text == "" || int.Parse(TextBox18.Text.ToString()) > 6) type_of_teacher = 1;
             else type_of_teacher = int.Parse(TextBox18.Text.ToString());
@@ -549,7 +545,7 @@ namespace SINU.Pages
             myUser.password = TextBox7.Text;
             myUser.photo_url = "https://image.flaticon.com/icons/png/512/21/21294.png";
 
-            if (SQLOperations.insertTeacher(myUser,type_of_teacher))
+            if (SQLOperations.insertTeacher(myUser, type_of_teacher))
             {
                 Response.Redirect("MyAccount.aspx");
             }

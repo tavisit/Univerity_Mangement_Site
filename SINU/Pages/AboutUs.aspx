@@ -6,6 +6,10 @@
 <head runat="server">
     <title>About Us</title>
             <style type="text/css">
+                .auto-style1 {
+            width: 600px;
+            height: 100px;
+        }
         .auto-style2 {
             height: 93px;
         }
@@ -28,7 +32,12 @@
                 <asp:Button ID="Button2" runat="server" Height="50px" OnClick="MyAccount_click" Text="MyAccount" Width="33%" BackColor="White" BorderStyle="Groove" Font-Bold="True" />
             </div>
         </div>
-        <div>
+        <div style="height: 100px;background-color: #FFFFFF">
+            </div>
+        <div style="margin-left:auto;margin-right:auto;background-color: #800080; width:60%; height:100%;" class="auto-style1">
+            <br />
+            <asp:Literal ID="Literal1" runat="server"></asp:Literal>
+            <br />
         </div>
     </form>
 </body>

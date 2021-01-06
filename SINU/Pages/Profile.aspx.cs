@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace SINU.Pages
 {
@@ -11,20 +9,13 @@ namespace SINU.Pages
     {
         private void ShowProfile(User myUser)
         {
-            Literal1.Text = "</br></br>";
-            Literal1.Text += "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
-            Literal1.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
-            Literal1.Text += "<h1 style=\"text-align:center;\">" + myUser.surname + " " + myUser.lastname + "</h1></br>";
-            Literal1.Text += "<h1 style=\"text-align:center;\">" + myUser.Student.Univ_info.specialization + "</h1></br>";
-            Literal1.Text += "<img style = \"margin-left: auto;margin-right: auto;display: block;\" border=\"0\" src=" + myUser.photo_url + " width = \"250px\" height = \"250px\">";
-            Literal1.Text += "<br><br></div>";
-            Literal1.Text += "</div>";
-
+            Literal1.Text = UsefulHtmlStuff.generalInfo(myUser);
             if (myUser.id > 200000)
             {
+                
                 //add collegues from series
                 List<User> myCollegues = SQLOperations.GetStudentsFromSeriesByStudentId(myUser.id);
-
+                
                 Literal1.Text += "<div style = \"margin-left: 5%;margin-right:5%;background-color:white;\">";
                 Literal1.Text += "<div style = \"margin-left: 5%;margin-right:5%;\">";
                 int counter = 0;
@@ -49,6 +40,10 @@ namespace SINU.Pages
                 Literal1.Text += "</table>";
                 Literal1.Text += "</div>";
                 Literal1.Text += "</div>";
+            }
+            else
+            {
+                Literal1.Text += UsefulHtmlStuff.teacherInfo(myUser);
             }
         }
         protected void Page_Load(object sender, EventArgs e)
